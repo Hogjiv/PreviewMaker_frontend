@@ -1,4 +1,5 @@
 <script>
+//import progressBar from "@/components/progressBar";
 export default {
   data() {
     return {
@@ -6,6 +7,7 @@ export default {
     }
   },
   components: {
+    // progressBar
   },
   created() {
     this.$store.dispatch('ioConnect')
@@ -14,9 +16,13 @@ export default {
 </script>
 
 <template>
-   <div id="app" class="d-flex justify-content-center content ">
+   <!-- <div id="app" class="d-flex justify-content-center content "> -->
+    <div id="app" class="app">
+    <!-- <router-link to="/progress">Test page</router-link> | -->
+    <!-- <router-link to="/faqPage"> FAQ </router-link> | -->
     <router-view></router-view>  
   </div>
+  
 </template>
 
 <style lang="scss">
@@ -27,7 +33,10 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap');
 
 body{
-  background-color: #F0EEF0;
+  background-color: #ffffff;
+}
+.app{
+  position: relative
 }
 .normal-text {
   font-family: "Roboto", sans-serif;
@@ -44,6 +53,21 @@ body{
   font-weight: 900; /* Жирный вес */
 }
 
+.font-size-14 {
+  font-size: 14px;
+}
+.font-size-16 {
+  font-size: 16px;
+}
+
+.font-size-19 {
+  font-size: 19px;
+}
+.font-size-22 {
+  font-size: 22px;
+}
+
+
 .font-size-24 {
   font-size: 24px;
 }
@@ -59,6 +83,12 @@ body{
 .font-color-dark{
   color: #5E5E5E;
 }
+
+.font-color-pink{
+  color: #C97191;
+}
+
+ 
 /* .content{
   margin-top: 40px; 
 } */

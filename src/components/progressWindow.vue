@@ -9,11 +9,13 @@ export default {
   <table class="d-flex flex-column">
     <tr class="d-flex flex-row  tab">
       <th>Model name</th>
+      <th>Title</th>
       <th>Status</th>
     </tr> 
     <div class="tab2">
       <tr class="tab  d-flex flex-row">
         <td > 0 0</td>
+        <td > title </td>
         <td>ok</td> 
       </tr>
     </div>

@@ -1,7 +1,8 @@
 <script>
-import progressWindow from "@/components/progressWindow.vue";
+//import progressWindow from "@/components/progressWindow.vue";
 import progressBar from "@/components/progressBar";
 import checkBox from "@/components/checkBox";
+import faqPage from "@/components/faqPage";
 
 export default {
   data() {
@@ -11,15 +12,18 @@ export default {
       imagePath: "",
       preview: true,
       showMore: false,
-      state2:true,
-      smallPreview: false
+      state2: true,
+      softScan: false,
+      hardScan: true,
+      faqOpen: false
     };
-  },   
+  },
   created() {
-  this.$store.dispatch('ioConnect');
-},
+    this.$store.dispatch('ioConnect');
+  },
   components: {
-    progressWindow,
+    //progressWindow,
+    faqPage,
     progressBar,
     checkBox,
   },
@@ -35,111 +39,167 @@ export default {
       this.$store.dispatch("makePreview", {
         modelPath: this.modelPath,
         imagePath: this.imagePath,
-        smallPreview: this.smallPreview
+        // smallPreview: this.smallPreview
+        softScan: this.softScan,
+        hardScan: this.hardScan
       });
-    },
+    }
   },
 };
 </script>
 
 <template>
-  <div class="d-flex flex-column w-100 align-items-center">
-    <div
-      class="d-flex font-size-40 bold-text text-center justify-content-center align-items-center preview w-100"
-    >
-      Preview maker
-    </div>
-    <div
-      class="d-flex text-center align-items-center flex-column main-form h-auto p-3 my-5"
-    >
-      <div class="d-flex flex-column align-items-center">
-        <div class="d-flex align-items-center flex-column input-block">
-          <input
-            type="text"
-            v-model="modelPath"
-            class="input-form my-4"
-            @input="saveDataModel"
-            placeholder="Path for load models C:/AppData/User/"
-          />
-          <input
-            type="text"
-            v-model="imagePath"
-            class="input-form"
-            @input="saveDataImage"
-            placeholder="Path for save image C:/AppData/User/"
-          />
-        </div>
+  <div class="header d-flex justify-content-center align-items-center">
+    <h2 class="bold-text font-color-dark text-uppercase"> Preview maker</h2>
+  </div>
 
-        <div class="d-flex flex-column my-4">
-          <checkBox
-            v-model="smallPreview" />
-            <p>smallPreview</p>
-        </div>
+  <div class="fluid-container d-flex flex-row">
+    <div class="container-lg d-flex flex-column justify-content-center align-items-center">
 
-        <div>
-          <button
-            class="btn big-btn"
-            :disabled="$store.state.scriptRunning"
-            @click="theOneButtonClicked">
-            <p class="bold-text font-size-32 font-color-dark text-center align-items-start">
-              <span v-if="$store.state.scriptRunning">Running!</span>
-              <span v-else>Run Script</span>
-            </p>
-          </button>
-          <button
-            class="btn big-btn"
-            @click="showProgress = !showProgress">
-            <p class="bold-text font-size-32 font-color-dark text-center align-items-start">
-              <span v-if="showProgress">Show less</span>
-              <span v-else>Show Progress</span>
-            </p>
-          </button>
-        </div>
-
-        <div v-if="showProgress">
-          <div v-if="$store.state.scriptRunning">          
-            <progressBar class="my-4"> </progressBar>
-          </div>    
-          <div>            
-            <div class="my-4 uu">
-              <div v-for="model in $store.state.modelsList" :key="model.name">
-                {{ model.name }}
-                <input type="checkbox" readonly :checked="model.ready" />
-                <img v-if="model.image" :src="model.image" />
+      <div class="container-lg d-flex flex-row justify-content-center align-items-center menu">
+        <div class="row col-12 ">
+          <div class="d-flex scan flex-column col-sm-2 col-md-2 justify-content-center align-items-center col-12">
+            <div class="d-flex flex-row">
+              <checkBox v-model="softScan" />
+              <p class="font-size-16"> Soft scan </p>
+            </div>
+            <div class="d-flex flex-row">
+              <checkBox v-model="hardScan"/>
+              <p class="font-size-16"> Hard scan </p>
+            </div>
+          </div>
+          <div class="d-flex flex-column justify-content-center align-items-center col-sm-8 col-md-8 col-12">
+            <input type="text" v-model="modelPath" class="input-form" @input="saveDataModel"
+              placeholder="Path for load models C:/AppData/User/"/>
+            <input type="text" v-model="imagePath" class="input-form mt-4" @input="saveDataImage"
+              placeholder="Path for save image C:/AppData/User/"/>
+          </div>
+          <div class="d-flex justify-content-center align-items-center faq  col-sm-2 col-md-2  j col-12 ">
+            <button class="btn btn-faq" @click="faqOpen = !faqOpen"> FAQ </button>
+              <div v-if="faqOpen"> 
+                <faqPage class="mt-4">  </faqPage>  
               </div>
-              <progressWindow> </progressWindow>
+          </div>
+        </div>
+      </div>
+
+      <div class="containter d-flex flex-column justify-content-center align-items-center">
+         <div class="btn-block">
+          <div>
+            <button class="btn big-btn" :disabled="$store.state.scriptRunning" @click="theOneButtonClicked">
+              <p class="bold-text font-size-22 font-color-dark text-center">
+                <span v-if="$store.state.scriptRunning">Running!</span>
+                <span v-else>Run Script</span>
+              </p>
+            </button>
+          </div>
+          <div class="">
+            <button class="btn big-btn mt-3" @click="showProgress = !showProgress">
+              <p class="bold-text font-size-22  font-color-dark text-center">
+                <span v-if="showProgress">Show less</span>
+                <span v-else>Show Progress</span>
+              </p>
+            </button>
+          </div>
+        </div>
+        <div v-if="showProgress">
+          <div v-if="$store.state.scriptRunning">
+             <progressBar class="my-4 d-flex justify-content-center align-items-center"> </progressBar>  
+          </div>
+          <div class="container w-100">
+            <div class="row justify-content-center align-items-center">
+              <div class="card  col-sm-6 col-md-4 col-lg-3 d-flex align-items-center mt-4 mx-3"
+                v-for="model in $store.state.modelsList" :key="model.name">
+                <img class="model-image my-3" v-if="model.image" :src="model.image"/>
+                <p class="font-size-14 font-color-dark   medium-text text-center" >
+                  {{ model.name }}
+                </p>
+                <!-- <input type="checkbox" readonly :checked="model.ready"/> -->
+                <p class="font-size-16 font-color-pink  text-center  medium-text">
+                  {{ model.title }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>  
+  </div>
 </template>
-
 <style>
-/* .marg {
-  margin-top: -220px;
-  background-color: #9f4e4e;
-} */
-.uu {
-  background-color: #9f4e4e;
-  height: 200px;
+.faq { 
+  right: 300px;
 }
-.pp { 
-  margin-top: -83px;
+.btn-faq{
+  width: 80px;
+  height: 80px;
 } 
+
+containter {
+  padding: 0px 0px 0px 0px;
+}
+.v {
+  background-color: #b560a7;
+}
+.x {
+  background-color: #60b58b;
+}
+.t {
+  background-color: #a5b560;
+}
+.xx {
+  background-color: #8cad98;
+  height: 100px;
+}
+p {
+  margin: 0px !important;
+  margin-bottom: 0px !important
+}
+.model-image {
+  width: 300px;
+  height: 300px;
+}
+.card {
+  width: 360px;
+  height: 420px;
+}
+.menu {
+  height: auto;
+  padding: 20px 0px 20px 0px;
+}
+.header {
+  background-color: #F1F1F1;
+  height: 70px;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+}
+.container-div {
+  background-color: #576aa2;
+  width: 1200px;
+}
+.previewer {
+  background-color: #8cad98;
+  height: 1000px;
+}
+.progress-menu {
+  background-color: #e4c64c;
+}
+.buttons {
+  height: 100px;
+}
+.content {
+  background-color: #ca7b7b;
+}
+.checkbox-div {
+  background-color: #e6caca;
+}
 .big-btn {
   outline: none;
   border: none;
-  width: 292px !important;
-  height: 84px !important;
-  border-radius: 30px;
-  background-color: #f0eef0;
+  width: 210px !important;
+  height: 75px !important;
+  border-radius: 25px;
+  background-color: #BCBCBC;
   padding-top: 13px;
-}
-.preview {
-  background-color: #fafafa;
-  height: 100px;
 }
 .input-block {
   align-items: end !important;
@@ -148,26 +208,23 @@ export default {
   background-color: rgb(138, 90, 31);
 }
 .input-form {
-  width: 600px;
+  width: 430px;
   height: 50px;
-  background-color: #f0eef0;
+  background-color: #F0EEF0;
   border-radius: 25px;
   border-style: none;
   outline: none;
 }
 .main-form {
-  width: 650px;
-  height: auto;
-  border-radius: 15px;
-  border: none;
-  background-color: #fafafa;
+  height: 100%;
+  width: 100%;
+  background-color: #a5b560;
 }
-
 .btn:hover {
-  background-color: #9f4e4e;
+  background-color: #C97191;
   color: #e6caca;
 }
 .btn:hover p {
-  color: #ffffff; /* Change text color to white on hover */
+  color: #ffffff;
 }
 </style>

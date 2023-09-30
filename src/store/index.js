@@ -11,6 +11,7 @@ const store = createStore({
       imagePath: "",
       socket: null,
       modelsList: [],
+      title: "",
       smallImage: null,
       bigImage: null,
       scriptRunning: false
@@ -44,12 +45,15 @@ const store = createStore({
         return {
           name: el,
           ready: false,
-          image: null        }
+          title: "",
+          image: null
+        }
       });
     },
     modelImage(state, data) {
       state.modelsList = state.modelsList.map(el => {
-        if (el.name !== data.modelName) return el
+        if (el.name !== data.modelName) return el;
+        el.title = data.title
         el.image = data.image
         return el
       })
@@ -82,10 +86,6 @@ const store = createStore({
       socket.on("modelsList", list => {
         store.commit("setModeslList", list)
         console.log(list, "modelsList")
-      })
-      socket.on('scriptCache', cache => {
-        store.commit("setModeslList", cache)
-        console.log(cache, "modelsCache")
       })
       socket.on('modelImage', data => {
         store.commit('modelImage', data)

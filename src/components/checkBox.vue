@@ -27,15 +27,14 @@ export default {
   </div>
 </template>
 <style>
-.checkbox {
+.checkbox { 
   width: 28px;
   height: 28px;
   border-radius: 5px;
-  background-color: #5e5e5e;
+  background-color: #F0EEF0;
+  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.25);
   margin-bottom: 10px;
+  
 }
-.rr {
-  background-color: aqua;
-  margin-left: 20px;
-}
+ 
 </style>
