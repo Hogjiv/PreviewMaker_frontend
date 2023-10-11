@@ -14,7 +14,8 @@ const store = createStore({
       title: "",
       smallImage: null,
       bigImage: null,
-      scriptRunning: false
+      scriptRunning: false,
+      // showMessage: ''
     };
   },
   mutations: {
@@ -34,6 +35,13 @@ const store = createStore({
     },
     setScriptRunning(state, next) {
       state.scriptRunning = next;
+      // if (next === true) {
+      //   return
+      // }
+      //   state.showMessage = 'Finish'
+      //   setTimeout(() => {
+      //     state.showMessage = ''
+      //   }, 3000)
     },
     ioSend(state, bigPreview) {
       console.log("bigPreview");
@@ -101,7 +109,7 @@ const store = createStore({
   getters: {
     getModelNames(state) {
       return state.modelNameData;
-    }},
+    }}
 });
 
 export default store;

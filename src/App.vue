@@ -67,7 +67,6 @@ body{
   font-size: 22px;
 }
 
-
 .font-size-24 {
   font-size: 24px;
 }
