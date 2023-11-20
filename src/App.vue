@@ -31,7 +31,7 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap');
-
+ 
 body{
   background-color: #ffffff;
 }
@@ -86,9 +86,7 @@ body{
 .font-color-pink{
   color: #C97191;
 }
-
  
-/* .content{
-  margin-top: 40px; 
-} */
+ 
+ 
 </style>

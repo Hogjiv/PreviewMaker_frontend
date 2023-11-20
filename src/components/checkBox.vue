@@ -16,9 +16,9 @@ export default {
 <template>
   <div class="d-flex flex-row">
     <div
-      class="checkbox d-flex mx-3"
+      class="checkbox d-flex"
       @click="onClick"
-      :style="{ backgroundColor: modelValue ? '#5E5E5E' : '#F0EEF0' }"
+      :style="{ backgroundColor: modelValue ? '#C97191' : '#F0EEF0' }"
       >
     </div>
     <label for="flexCheckDefault">
@@ -32,9 +32,7 @@ export default {
   height: 28px;
   border-radius: 5px;
   background-color: #F0EEF0;
-  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.25);
-  margin-bottom: 10px;
-  
+  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.25); 
 }
  
 </style>

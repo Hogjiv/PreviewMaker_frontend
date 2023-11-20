@@ -1,8 +1,9 @@
 <script>
-//import progressWindow from "@/components/progressWindow.vue";
+// import progressWindow from "@/components/progressWindow.vue";
 import progressBar from "@/components/progressBar";
 import checkBox from "@/components/checkBox";
 import faqPage from "@/components/faqPage";
+// import popUp from "@/components/popUp";
 
 export default {
   data() {
@@ -16,128 +17,230 @@ export default {
       softScan: false,
       hardScan: true,
       faqOpen: false,
-      showMessage: false
+      showMessage: false,
+      showPopUp: false,
+      disabled: false,
+      btnActive: false,
+      btnDisabled: false,
     };
   },
   created() {
-    this.$store.dispatch('ioConnect');
+    this.$store.dispatch("ioConnect");
   },
+
   components: {
     //progressWindow,
     faqPage,
     progressBar,
     checkBox,
+    // popUp
   },
   watch: {
-   '$store.state.scriptRunning'(newVal) {
-    // console.log(`Свойство 'scriptRunning' изменилось: ${oldVal} -> ${newVal}`);
-    if(newVal === false) {
-      this.showMessage = true
-    }
-  }
-},
-    methods: {
-      theOneButtonClicked() {
-        if (this.$store.state.scriptRunning) {
-          this.showProgress = !this.showProgress
-        } else {
-          this.makePreview()
-        }
-      },
-      makePreview() {
-        this.$store.dispatch("makePreview", {
-          modelPath: this.modelPath,
-          imagePath: this.imagePath,
-          // smallPreview: this.smallPreview
-          softScan: this.softScan,
-          hardScan: this.hardScan
-//          add 
-        });
+    "$store.state.scriptRunning"(newVal) {
+      if (newVal === false) {
+        this.showMessage = true;
       }
+    },
+  },
+  methods: {
+    btnClicked() {
+      // checking if fields are correct
+      if (!this.isButtonDisabled()) {
+        console.log("fields are correct");
+        this.btnActive = true;
+        this.btnDisabled = false;
+        // Set showPopUp to false when fields are correct
+        this.showPopUp = false;
+        // setTimeout(() => {
+        //   this.showPopUp = true;
+        // }, 10);
+      } else {
+        this.showPopUp = false;
+        setTimeout(() => {
+          this.showPopUp = true;
+          this.btnDisabled = true;
+          this.btnActive = false;
+        }, 1)
+        console.log("ERROR");
+      }
+      // check if showProgress is active
+      if (this.btnActive === true) {
+        this.makePreview();
+        console.log("btnActive = true");
+        this.showProgress = !this.showProgress;
+      } else {
+        console.log("ELSE");
+        //this.makePreview();
+      }
+    },
+    isButtonDisabled() {
+      const modelPathValid =
+        this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
+      const imagePathValid =
+        this.imagePath.trim() && /^[A-Z]\W+.*$/gm.test(this.imagePath);
+      return !modelPathValid || !imagePathValid;
+    },
+    makePreview() {
+      this.$store.dispatch("makePreview", {
+        modelPath: this.modelPath,
+        imagePath: this.imagePath,
+        softScan: this.softScan,
+        hardScan: this.hardScan,
+      });
+    },
   },
 };
 </script>
 
 <template>
   <div class="header d-flex justify-content-center align-items-center">
-    <h2 class="bold-text font-color-dark text-uppercase"> Preview maker</h2>
+    <h2 class="bold-text font-color-dark text-uppercase">Preview maker</h2>
+  </div>
+
+  <div
+    v-if="faqOpen"
+    class="faqBlock   d-flex col-lg align-items-center align-self-center justify-content-center"
+  >
+    <faqPage> </faqPage>
   </div>
 
   <div class="fluid-container d-flex flex-row">
-    <div class="container-lg d-flex flex-column justify-content-center align-items-center">
-
-      <div class="container-lg d-flex flex-row justify-content-center align-items-center menu">
-        <div class="row col-12 ">
-          <div class="d-flex scan flex-column col-sm-2 col-md-2 justify-content-center align-items-center col-12">
-            <div class="d-flex flex-row">
+    <div
+      class="container-lg d-flex flex-column justify-content-center align-items-center"
+    >
+      <div
+        class="container-lg d-flex flex-row justify-content-center align-items-center menu xx"
+      >
+        <div class="row col-12 d-flex justify-content-center">
+          <div
+            class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 aa order-lg-1 order-sm-2 order-2"
+          >
+            <div
+              class="d-flex mb-2 align-self-lg-start align-self-sm-center align-self-center"
+            >
               <checkBox v-model="softScan" />
-              <p class="font-size-16"> Soft scan </p>
+              <p class="font-size-16">Soft scan</p>
             </div>
-            <div class="d-flex flex-row">
+            <div
+              class="d-flex align-self-lg-start align-self-sm-center align-self-center"
+            >
               <checkBox v-model="hardScan" />
-              <p class="font-size-16"> Hard scan </p>
+              <p class="font-size-16">Hard scan</p>
             </div>
           </div>
-          <div class="d-flex flex-column justify-content-center align-items-center col-sm-8 col-md-8 col-12">
-            <input type="text" v-model="modelPath" class="input-form" @input="saveDataModel"
-              placeholder="Path for load models C:/AppData/User/" />
-            <input type="text" v-model="imagePath" class="input-form mt-4" @input="saveDataImage"
-              placeholder="Path for save image C:/AppData/User/" />
+          <div
+            class="d-flex flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 cc order-lg-2 order-sm-1 order-1"
+          >
+            <input
+              type="text"
+              v-model="modelPath"
+              class="input-form"
+              @input="saveDataModel"
+              placeholder="Path for load models"
+            />
+            <input
+              type="text"
+              v-model="imagePath"
+              class="input-form mt-3"
+              @input="saveDataImage"
+              placeholder="Path for save image"
+            />
           </div>
-          <div class="d-flex justify-content-center align-items-center faq  col-sm-2 col-md-2  j col-12 ">
-            <button class="btn btn-faq" @click="faqOpen = !faqOpen"> FAQ </button>
-            <div v-if="faqOpen">
-              <faqPage class="mt-4"> </faqPage>
-            </div>
+
+          <div
+            class="d-flex faq flex-column col-md col-lg-2 col-sm-6 align-items-center align-self-center justify-content-center aa order-lg-3 order-sm-3 order-3"
+          >
+            <button
+              class="btn btn-faq bold-text font-size-32"
+              @click="faqOpen = !faqOpen"
+            >
+              FAQ
+            </button>
           </div>
         </div>
       </div>
-
-      <div class="containter d-flex flex-column justify-content-center align-items-center">
-        <div class="btn-block">
-          <div>
-            <button class="btn big-btn" :disabled="$store.state.scriptRunning" @click="theOneButtonClicked">
-              <p class="bold-text font-size-22 font-color-dark text-center">
-                <span v-if="$store.state.scriptRunning">Running!</span>
-                <span v-else>Run Script</span>
+      <div
+        class="containter d-flex flex-column justify-content-center align-items-center"
+      >
+        <div class="btn-block d-flex flex-column">
+          <div class="d-flex justify-content-center align-items-center">
+            <button
+              class="big-btn mt-3 col-12 align-items-center"
+              :class="{
+                btnActive: btnActive && $store.state.scriptRunning,
+                btnDisabled: !$store.state.scriptRunning,
+              }"
+              @click="btnClicked"
+            >
+              <p
+                class="bold-text font-size-22 text-white text-center btnDisables"
+              >
+                {{
+                  btnActive && $store.state.scriptRunning
+                    ? "Running!"
+                    : "Make previews!"
+                }}
               </p>
+              <div class="popUp"
+                v-if="showPopUp">
+                Copy path from PC which looks like 'D/: ....'
+              </div>
             </button>
           </div>
-          <!-- <div class=""> -->
-          <button class="btn big-btn mt-3" @click="showProgress = !showProgress">
-            <p class="bold-text font-size-22  font-color-dark text-center">
-              <span v-if="showProgress">Show less</span>
-              <span v-else>Show Progress</span>
-            </p>
-          </button>
-          <!-- </div> -->
-        </div>
-
-
-        <!-- open preview searcher when button pushed -->
-        <div v-if="showProgress">
-          <div v-if="$store.state.scriptRunning">
-            <progressBar class="my-4 d-flex justify-content-center align-items-center"> </progressBar>
-          </div>
-          <!-- <h2 v-if="$store.state.showMessage !== ''"
-            class="justify-content-center align-items-center text-center my-4 font-color-pink"> Finish! </h2> -->
-            <h2 v-if="showMessage"
-            class="justify-content-center align-items-center text-center my-4 font-color-pink"> 
-              Finish! 
-            </h2>
-             
-          <!-- preview searcher -->
-          <div class="container w-100 preview-window">
-            <div class="row justify-content-center align-items-center">
-              <div class="card  col-sm-6 col-md-4 col-lg-3 d-flex align-items-center mt-4 mx-3"
-                v-for="model in $store.state.modelsList" :key="model.name">
-                <img class="model-image my-3" v-if="model.image" :src="model.image" />
-                <p class="font-size-14 font-color-dark   medium-text text-center">
-                  {{ model.name }}
+          <div v-if="btnActive">
+            <div
+              class="d-flex col-12 justify-content-center align-items-center"
+            >
+              <button
+                class="big-btn mt-3"
+                @click="showProgress = !showProgress"
+              >
+                <p class="bold-text font-size-22 font-color-dark text-center">
+                  <span v-if="showProgress" class="text-white"
+                    >Show Progress</span
+                  >
+                  <span v-else class="text-white">Show less</span>
                 </p>
-                <p class="font-size-16 font-color-pink  text-center  medium-text">
-                  {{ model.title }}
-                </p>
+              </button>
+            </div>
+
+            <div v-if="!showProgress" class="preview-window mt-5">
+              <div v-if="$store.state.scriptRunning">
+                <progressBar
+                  class="my-4 d-flex justify-content-center align-items-center"
+                >
+                </progressBar>
+              </div>
+              <h2
+                v-if="!$store.state.scriptRunning"
+                class="justify-content-center align-items-center text-center my-4 bold-text font-size-24 font-color-pink text-uppercase"
+              >
+                Finish!
+              </h2>
+              <div class="container w-100">
+                <div class="row justify-content-center align-items-center">
+                  <div
+                    class="card col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-center mt-4 mx-3"
+                    v-for="model in $store.state.modelsList"
+                    :key="model.name"
+                  >
+                    <img
+                      class="model-image my-3"
+                      v-if="model.image"
+                      :src="model.image"
+                    />
+                    <p
+                      class="font-size-14 font-color-dark medium-text text-center"
+                    >
+                      {{ model.name }}
+                    </p>
+                    <p
+                      class="font-size-16 font-color-pink text-center medium-text"
+                    >
+                      {{ model.title }}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -147,49 +250,106 @@ export default {
   </div>
 </template>
 <style>
+.faqBlock {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1; 
+  position: fixed; 
+}
+.one {
+  background-color: #d65959 !important;
+  /* animation: slideIn 1s ease-in-out; */
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(-20%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.two {
+  background-color: #989898 !important;
+  /*   
+  display: none; */
+}
+/* .faq {  
+  width: 200px;
+  height: 100px;  
+} */
+.btn-faq {
+  width: 80px;
+  height: 80px;
+  background-color: rgb(98, 91, 198);
+}
+/* .newF {  
+  background-color: red;
+  width: 300px;
+  height: 200px;
+  top: 140px; 
+} */
+.tt {
+  align-self: self-start;
+}
+.xx {
+  position: relative;
+  background-color: #358251;
+}
+.bb {
+  background-color: aqua;
+}
+.cc {
+  background-color: rgb(130, 87, 124);
+}
+.aa {
+  background-color: #8d97ce;
+}
+/* @keyframes slideIn {
+  from {
+    transform: translateX(300px); 
+  }
+  to {
+    transform: translateX(0); 
+  }
+} */
+
+input {
+  text-align: center;
+}
+
+.backbtn {
+  color: #7ad723;
+  width: 210px !important;
+  height: 75px !important;
+  border-radius: 25px;
+  border-color: gray;
+  background-color: #d56a28;
+}
+
 .preview-window {
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
   margin-top: 10px;
   padding-top: 10px;
   margin-bottom: 40px;
-  padding-bottom: 40px;
+  padding-bottom: 60px;
   border-radius: 25px;
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
-.faq {
-  right: 300px;
-}
-
-.btn-faq {
-  width: 80px;
-  height: 80px;
+.btn-faq-open {
+  background-color: yellow;
 }
 
 containter {
   padding: 0px 0px 0px 0px;
 }
 
-.v {
-  background-color: #b560a7;
-}
-
-.x {
-  background-color: #60b58b;
-}
-
-.t {
-  background-color: #a5b560;
-}
-
-.xx {
-  background-color: #8cad98;
-  height: 100px;
-}
-
 p {
   margin: 0px !important;
-  margin-bottom: 0px !important
+  margin-bottom: 0px !important;
 }
 
 .model-image {
@@ -202,20 +362,10 @@ p {
   height: 420px;
 }
 
-.menu {
-  height: auto;
-  padding: 20px 0px 20px 0px;
-}
-
 .header {
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
   height: 70px;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
-}
-
-.container-div {
-  background-color: #576aa2;
-  width: 1200px;
 }
 
 .previewer {
@@ -225,6 +375,10 @@ p {
 
 .progress-menu {
   background-color: #e4c64c;
+}
+
+.menu {
+  padding: 30px 0px 30px 0px;
 }
 
 .buttons {
@@ -239,14 +393,9 @@ p {
   background-color: #e6caca;
 }
 
-.big-btn {
-  outline: none;
-  border: none;
-  width: 210px !important;
-  height: 75px !important;
-  border-radius: 25px;
-  background-color: #BCBCBC;
-  padding-top: 13px;
+.btn:disabled {
+  background-color: #ffffffda;
+  border: 1mm solid #484848;
 }
 
 .input-block {
@@ -260,7 +409,7 @@ p {
 .input-form {
   width: 430px;
   height: 50px;
-  background-color: #F0EEF0;
+  background-color: #f0eef0;
   border-radius: 25px;
   border-style: none;
   outline: none;
@@ -272,11 +421,123 @@ p {
   background-color: #a5b560;
 }
 
-.btn:hover {
+/* .btn:hover {
   background-color: #C97191;
   color: #e6caca;
-}
+} */
 
 .btn:hover p {
   color: #ffffff;
-}</style>
+}
+
+.big-btn {
+  outline: none;
+  border: none;
+  width: 210px !important;
+  height: 75px !important;
+  border-radius: 25px;
+  background-color: #bcbcbc;
+}
+
+.btnActive {
+  background-color: #c97191;
+  background-size: 200% 100%;
+  background-image: linear-gradient(
+    to right,
+    #de93af 0%,
+    #a97ec2 25%,
+    #de93af 50%,
+    #a97ec2 75%,
+    #de93af 100%
+  );
+  transition: background-position 1s linear;
+  animation: gradientAnimation 6s linear infinite;
+}
+
+.btnDisabled {
+  background-color: #ffffffda;
+  color: #484848 !important;
+  background-color: #c8c8c8 !important;
+  position: relative;
+  transition: all 0.02s ease;
+}
+
+.btnDisabled:hover {
+  background-color: #ffffffda;
+  color: #1c1c1c !important;
+  background-color: #c97191 !important;
+}
+
+.btnDisabled:active {
+  background-color: #a0a0a0 !important;
+  animation: error-blink 0.24s linear;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 100% 0%;
+  }
+  100% {
+    background-position: -100% 0%;
+  }
+}
+
+@keyframes error-blink {
+  0%,
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(-5px);
+  }
+
+  0%,
+  10%,
+  30%,
+  50%,
+  70% {
+    transform: translateX(5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes btnDisabled1 {
+  0% {
+    left: 0;
+  }
+
+  50% {
+    left: 194px;
+  }
+
+  100% {
+    left: 0;
+  }
+}
+
+.popUp {
+  background-color: #7e7e7ec7;
+  max-width: 250px;
+  max-height: 100px;
+  position: absolute;
+  margin-top: 30px;
+  border-radius: 10px;
+  animation-name: fadeOut;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    display: none;
+  }
+}
+</style>

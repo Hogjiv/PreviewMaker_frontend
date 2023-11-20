@@ -15,7 +15,7 @@ const store = createStore({
       smallImage: null,
       bigImage: null,
       scriptRunning: false,
-      // showMessage: ''
+      // showResult: false,
     };
   },
   mutations: {
@@ -35,14 +35,10 @@ const store = createStore({
     },
     setScriptRunning(state, next) {
       state.scriptRunning = next;
-      // if (next === true) {
-      //   return
-      // }
-      //   state.showMessage = 'Finish'
-      //   setTimeout(() => {
-      //     state.showMessage = ''
-      //   }, 3000)
     },
+    // setShowResult(state, value) {
+    //   state.showResult = value;
+    // },
     ioSend(state, bigPreview) {
       console.log("bigPreview");
       state.bigPreview = bigPreview;
