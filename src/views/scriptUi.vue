@@ -51,6 +51,7 @@ export default {
           // smallPreview: this.smallPreview
           softScan: this.softScan,
           hardScan: this.hardScan
+//          add 
         });
       }
   },
