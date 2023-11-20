@@ -3,26 +3,33 @@
 export default {
   data() {
     return {
-      name: ''
-    }
+      name: "",
+    };
   },
   components: {
     // progressBar
   },
   created() {
-    this.$store.dispatch('ioConnect')
-  }
-}
+    this.$store.dispatch("ioConnect");
+  },
+};
 </script>
 
 <template>
-   <!-- <div id="app" class="d-flex justify-content-center content "> -->
-    <div id="app" class="app">
-    <!-- <router-link to="/progress">Test page</router-link> | -->
-    <!-- <router-link to="/faqPage"> FAQ </router-link> | -->
-    <router-view></router-view>  
+  <!-- <div id="app" class="d-flex justify-content-center content "> -->
+  <div class="xx">
+  <div id="app" class="app">
+    <router-view></router-view>
+
   </div>
-  
+   <div class=" footer font-color-gray  mt-3 font-size-14 normal-text footer text-center" >
+      Questions to
+      <a href="mailto:hogjiv@gmail.com">
+      hhyperplace@gmail.com </a> <br>
+      donation to PayPal <u> hogjiv01@gmail.com </u> <br>
+      Copyright Irina Avdeyeva | 2023
+    </div>
+    </div>
 </template>
 
 <style lang="scss">
@@ -30,14 +37,30 @@ export default {
 </style>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap');
- 
-body{
-  background-color: #ffffff;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap");
+
+body {
+height: 100%;
+ margin: 0; /* Убираем отступы */
 }
-.app{
-  position: relative
+
+a {
+color: #B9B9B9 !important;
 }
+
+
+.footer {
+ width: 100%;
+position: absolute;
+
+}
+
+.app {
+/*  position: relative;*/
+/*  height: 100%;*/
+
+}
+
 .normal-text {
   font-family: "Roboto", sans-serif;
   font-weight: 400; /* Обычный вес */
@@ -56,6 +79,7 @@ body{
 .font-size-14 {
   font-size: 14px;
 }
+
 .font-size-16 {
   font-size: 16px;
 }
@@ -63,6 +87,7 @@ body{
 .font-size-19 {
   font-size: 19px;
 }
+
 .font-size-22 {
   font-size: 22px;
 }
@@ -79,14 +104,14 @@ body{
   font-size: 40px;
 }
 
-.font-color-dark{
-  color: #5E5E5E;
+.font-color-dark {
+  color: #5e5e5e;
 }
 
-.font-color-pink{
-  color: #C97191;
+.font-color-pink {
+  color: #c97191;
 }
- 
- 
- 
+
+.font-color-gray {
+color: #B9B9B9}
 </style>

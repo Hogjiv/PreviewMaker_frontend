@@ -24,6 +24,7 @@ export default {
       btnDisabled: false,
     };
   },
+
   created() {
     this.$store.dispatch("ioConnect");
   },
@@ -43,6 +44,10 @@ export default {
     },
   },
   methods: {
+    btnClosed() {
+      console.log('BTNCLOSED from other comp' )
+      this.faqOpen = false
+    },
     btnClicked() {
       // checking if fields are correct
       if (!this.isButtonDisabled()) {
@@ -60,7 +65,7 @@ export default {
           this.showPopUp = true;
           this.btnDisabled = true;
           this.btnActive = false;
-        }, 1)
+        }, 1);
         console.log("ERROR");
       }
       // check if showProgress is active
@@ -99,38 +104,33 @@ export default {
 
   <div
     v-if="faqOpen"
-    class="faqBlock   d-flex col-lg align-items-center align-self-center justify-content-center"
-  >
-    <faqPage> </faqPage>
+    class="faqBlock d-flex col-lg align-items-center align-self-center justify-content-center">
+    <faqPage
+     @btnClosed='btnClosed'
+    >
+
+    </faqPage>
   </div>
 
   <div class="fluid-container d-flex flex-row">
-    <div
-      class="container-lg d-flex flex-column justify-content-center align-items-center"
-    >
-      <div
-        class="container-lg d-flex flex-row justify-content-center align-items-center menu xx"
-      >
+    <div class="container-lg d-flex flex-column justify-content-center align-items-center">
+      <div class="container-lg d-flex flex-row justify-content-center align-items-center menu">
         <div class="row col-12 d-flex justify-content-center">
-          <div
-            class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 aa order-lg-1 order-sm-2 order-2"
-          >
-            <div
-              class="d-flex mb-2 align-self-lg-start align-self-sm-center align-self-center"
-            >
+          <div class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2">
+            <div class="d-flex mb-2 align-self-lg-start align-self-sm-center align-self-center">
               <checkBox v-model="softScan" />
-              <p class="font-size-16">Soft scan</p>
+              <p class="font-size-16">
+                Soft scan
+              </p>
             </div>
-            <div
-              class="d-flex align-self-lg-start align-self-sm-center align-self-center"
-            >
+            <div class="d-flex align-self-lg-start align-self-sm-center align-self-center">
               <checkBox v-model="hardScan" />
-              <p class="font-size-16">Hard scan</p>
+              <p class="font-size-16">
+                Hard scan
+              </p>
             </div>
           </div>
-          <div
-            class="d-flex flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 cc order-lg-2 order-sm-1 order-1"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 order-lg-2 order-sm-1 order-1">
             <input
               type="text"
               v-model="modelPath"
@@ -147,21 +147,18 @@ export default {
             />
           </div>
 
-          <div
-            class="d-flex faq flex-column col-md col-lg-2 col-sm-6 align-items-center align-self-center justify-content-center aa order-lg-3 order-sm-3 order-3"
-          >
-            <button
-              class="btn btn-faq bold-text font-size-32"
+
+          <div class="d-flex faq flex-column col-md col-lg-2 col-sm-6 align-items-center align-self-center justify-content-center  order-lg-3 order-sm-3 order-3">
+            <button class="btn btn-faq bold-text font-size-32"
               @click="faqOpen = !faqOpen"
-            >
-              FAQ
+             >
+                FAQ
             </button>
           </div>
         </div>
       </div>
       <div
-        class="containter d-flex flex-column justify-content-center align-items-center"
-      >
+        class="containter d-flex flex-column justify-content-center align-items-center" >
         <div class="btn-block d-flex flex-column">
           <div class="d-flex justify-content-center align-items-center">
             <button
@@ -170,36 +167,34 @@ export default {
                 btnActive: btnActive && $store.state.scriptRunning,
                 btnDisabled: !$store.state.scriptRunning,
               }"
-              @click="btnClicked"
-            >
-              <p
-                class="bold-text font-size-22 text-white text-center btnDisables"
-              >
+              @click="btnClicked" >
+              <p class="bold-text font-size-22 text-white text-center btnDisables" >
                 {{
                   btnActive && $store.state.scriptRunning
                     ? "Running!"
                     : "Make previews!"
                 }}
               </p>
-              <div class="popUp"
-                v-if="showPopUp">
+              <div class="popUp" v-if="showPopUp">
                 Copy path from PC which looks like 'D/: ....'
               </div>
             </button>
           </div>
           <div v-if="btnActive">
             <div
-              class="d-flex col-12 justify-content-center align-items-center"
-            >
+              class="d-flex col-12 justify-content-center align-items-center" >
               <button
                 class="big-btn mt-3"
-                @click="showProgress = !showProgress"
-              >
+                @click="showProgress = !showProgress">
                 <p class="bold-text font-size-22 font-color-dark text-center">
-                  <span v-if="showProgress" class="text-white"
-                    >Show Progress</span
-                  >
-                  <span v-else class="text-white">Show less</span>
+                  <span v-if="showProgress"
+                    class="text-white">
+                      Show Progress
+                  </span>
+                  <span v-else
+                    class="text-white">
+                      Show less
+                  </span>
                 </p>
               </button>
             </div>
@@ -222,21 +217,17 @@ export default {
                   <div
                     class="card col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-center mt-4 mx-3"
                     v-for="model in $store.state.modelsList"
-                    :key="model.name"
-                  >
+                    :key="model.name">
                     <img
                       class="model-image my-3"
                       v-if="model.image"
-                      :src="model.image"
-                    />
+                      :src="model.image" />
                     <p
-                      class="font-size-14 font-color-dark medium-text text-center"
-                    >
+                      class="font-size-14 font-color-dark medium-text text-center" >
                       {{ model.name }}
                     </p>
                     <p
-                      class="font-size-16 font-color-pink text-center medium-text"
-                    >
+                      class="font-size-14 font-color-pink text-center medium-text">
                       {{ model.title }}
                     </p>
                   </div>
@@ -254,13 +245,10 @@ export default {
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: 1; 
-  position: fixed; 
+  z-index: 1;
+  position: fixed;
 }
-.one {
-  background-color: #d65959 !important;
-  /* animation: slideIn 1s ease-in-out; */
-}
+
 @keyframes slideIn {
   from {
     transform: translateX(-20%);
@@ -271,62 +259,22 @@ export default {
     opacity: 1;
   }
 }
-.two {
-  background-color: #989898 !important;
-  /*   
-  display: none; */
-}
-/* .faq {  
-  width: 200px;
-  height: 100px;  
-} */
+
 .btn-faq {
   width: 80px;
   height: 80px;
-  background-color: rgb(98, 91, 198);
+  background-color: white;
 }
-/* .newF {  
-  background-color: red;
-  width: 300px;
-  height: 200px;
-  top: 140px; 
-} */
-.tt {
-  align-self: self-start;
+
+
+.btn-faq:hover, btn-faq:active{
+  background-color: #c97191;
 }
-.xx {
-  position: relative;
-  background-color: #358251;
-}
-.bb {
-  background-color: aqua;
-}
-.cc {
-  background-color: rgb(130, 87, 124);
-}
-.aa {
-  background-color: #8d97ce;
-}
-/* @keyframes slideIn {
-  from {
-    transform: translateX(300px); 
-  }
-  to {
-    transform: translateX(0); 
-  }
-} */
+
+
 
 input {
   text-align: center;
-}
-
-.backbtn {
-  color: #7ad723;
-  width: 210px !important;
-  height: 75px !important;
-  border-radius: 25px;
-  border-color: gray;
-  background-color: #d56a28;
 }
 
 .preview-window {
@@ -337,10 +285,6 @@ input {
   padding-bottom: 60px;
   border-radius: 25px;
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
-}
-
-.btn-faq-open {
-  background-color: yellow;
 }
 
 containter {
@@ -368,42 +312,13 @@ p {
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
 }
 
-.previewer {
-  background-color: #8cad98;
-  height: 1000px;
-}
-
-.progress-menu {
-  background-color: #e4c64c;
-}
-
 .menu {
   padding: 30px 0px 30px 0px;
-}
-
-.buttons {
-  height: 100px;
-}
-
-.content {
-  background-color: #ca7b7b;
-}
-
-.checkbox-div {
-  background-color: #e6caca;
 }
 
 .btn:disabled {
   background-color: #ffffffda;
   border: 1mm solid #484848;
-}
-
-.input-block {
-  align-items: end !important;
-}
-
-.progress-window {
-  background-color: rgb(138, 90, 31);
 }
 
 .input-form {
@@ -414,17 +329,6 @@ p {
   border-style: none;
   outline: none;
 }
-
-.main-form {
-  height: 100%;
-  width: 100%;
-  background-color: #a5b560;
-}
-
-/* .btn:hover {
-  background-color: #C97191;
-  color: #e6caca;
-} */
 
 .btn:hover p {
   color: #ffffff;
