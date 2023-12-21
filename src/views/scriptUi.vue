@@ -49,6 +49,8 @@ export default {
       this.faqOpen = false
     },
     btnClicked() {
+      window.API.startScan()
+
       // checking if fields are correct
       if (!this.isButtonDisabled()) {
         console.log("fields are correct");
