@@ -26,7 +26,7 @@ export default {
   },
 
   created() {
-    this.$store.dispatch("ioConnect");
+    this.$store.dispatch("electronConnect");
   },
 
   components: {
@@ -39,6 +39,7 @@ export default {
   watch: {
     "$store.state.scriptRunning"(newVal) {
       if (newVal === false) {
+        console.log("WATCH")
         this.showMessage = true;
       }
     },
@@ -48,9 +49,9 @@ export default {
       console.log('BTNCLOSED from other comp' )
       this.faqOpen = false
     },
-    btnClicked() {
-      window.API.startScan()
 
+
+    btnClicked() {
       // checking if fields are correct
       if (!this.isButtonDisabled()) {
         console.log("fields are correct");
@@ -58,9 +59,6 @@ export default {
         this.btnDisabled = false;
         // Set showPopUp to false when fields are correct
         this.showPopUp = false;
-        // setTimeout(() => {
-        //   this.showPopUp = true;
-        // }, 10);
       } else {
         this.showPopUp = false;
         setTimeout(() => {
@@ -77,7 +75,6 @@ export default {
         this.showProgress = !this.showProgress;
       } else {
         console.log("ELSE");
-        //this.makePreview();
       }
     },
     isButtonDisabled() {

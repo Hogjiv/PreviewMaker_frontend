@@ -22,10 +22,12 @@ const { ScanFiles, bigImage } = require("./scriptInProgress");
 
 io.on('connection', (sock) => {
   console.log('SERVER a user connected');
+
    sock.on('myEvent', (someData) => {
      console.log('SERVER event from UI came', someData)
      sock.emit('serverEvent', someData)
    })
+
   sock.on('startScript', async data => {
     console.log('starting script by io event!', data)
     try {

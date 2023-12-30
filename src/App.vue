@@ -10,7 +10,7 @@ export default {
     // progressBar
   },
   created() {
-    this.$store.dispatch("ioConnect");
+     this.$store.dispatch("electronConnect");
   },
 };
 </script>
