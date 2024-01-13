@@ -1,12 +1,13 @@
-const { contextBridge, ipcRenderer  } = require('electron')
+const {contextBridge, ipcRenderer} = require('electron')
 
 contextBridge.exposeInMainWorld('API', {
     node: () => process.versions.node,
     chrome: () => process.versions.chrome,
     electron: () => process.versions.electron,
-    
+
     test: (data) => {
         ipcRenderer.invoke('ping', data)
+        console.log("invoke test")
     },
     startScript: (data) => {
         console.log('Handle scriptRunning invoked_1')
@@ -14,12 +15,13 @@ contextBridge.exposeInMainWorld('API', {
         //console.log("Image and Model user paths from preload.js", data)
     },
     modelsList: (data) => {
-        console.log('Handle scriptRunning invoked_2')
-        ipcRenderer.invoke('modelsList', data)
+        console.log('Handle scriptRunning invoked_2 modelList')
+        ipcRenderer.invoke('modelsListEvent', data)
     },
     scriptRunning: (data) => {
         console.log('Handle scriptRunning invoked_3')
         ipcRenderer.invoke('scriptRunningEvent', data)
+        console.log('Handle scriptRunning invoked_4 scriptRunningEvent')
     },
 
     onScriptRunning: (callback) => ipcRenderer.on('scriptRunningEvent', (_event, value) => callback(value)),

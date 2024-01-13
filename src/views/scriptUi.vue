@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     btnClosed() {
-      console.log('BTNCLOSED from other comp' )
+      console.log('BTNCLOSED from other comp')
       this.faqOpen = false
     },
 
@@ -68,6 +68,7 @@ export default {
         }, 1);
         console.log("ERROR");
       }
+
       // check if showProgress is active
       if (this.btnActive === true) {
         this.makePreview();
@@ -79,9 +80,9 @@ export default {
     },
     isButtonDisabled() {
       const modelPathValid =
-        this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
+          this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
       const imagePathValid =
-        this.imagePath.trim() && /^[A-Z]\W+.*$/gm.test(this.imagePath);
+          this.imagePath.trim() && /^[A-Z]\W+.*$/gm.test(this.imagePath);
       return !modelPathValid || !imagePathValid;
     },
     makePreview() {
@@ -91,6 +92,11 @@ export default {
         softScan: this.softScan,
         hardScan: this.hardScan,
       });
+      console.log(
+          "modelpath = ", this.modelPath,
+          "imgPath = ", this.imagePath,
+          "softscan = ", this.softScan,
+          "hardscan = ", this.hardScan)
     },
   },
 };
@@ -102,10 +108,10 @@ export default {
   </div>
 
   <div
-    v-if="faqOpen"
-    class="faqBlock d-flex col-lg align-items-center align-self-center justify-content-center">
+      v-if="faqOpen"
+      class="faqBlock d-flex col-lg align-items-center align-self-center justify-content-center">
     <faqPage
-     @btnClosed='btnClosed'
+        @btnClosed='btnClosed'
     >
 
     </faqPage>
@@ -115,63 +121,66 @@ export default {
     <div class="container-lg d-flex flex-column justify-content-center align-items-center">
       <div class="container-lg d-flex flex-row justify-content-center align-items-center menu">
         <div class="row col-12 d-flex justify-content-center">
-          <div class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2">
+          <div
+              class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2">
             <div class="d-flex mb-2 align-self-lg-start align-self-sm-center align-self-center">
-              <checkBox v-model="softScan" />
+              <checkBox v-model="softScan"/>
               <p class="font-size-16">
                 Soft scan
               </p>
             </div>
             <div class="d-flex align-self-lg-start align-self-sm-center align-self-center">
-              <checkBox v-model="hardScan" />
+              <checkBox v-model="hardScan"/>
               <p class="font-size-16">
                 Hard scan
               </p>
             </div>
           </div>
-          <div class="d-flex flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 order-lg-2 order-sm-1 order-1">
+          <div
+              class="d-flex flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 order-lg-2 order-sm-1 order-1">
             <input
-              type="text"
-              v-model="modelPath"
-              class="input-form"
-              @input="saveDataModel"
-              placeholder="Path for load models"
+                type="text"
+                v-model="modelPath"
+                class="input-form"
+                @input="saveDataModel"
+                placeholder="Path for load models"
             />
             <input
-              type="text"
-              v-model="imagePath"
-              class="input-form mt-3"
-              @input="saveDataImage"
-              placeholder="Path for save image"
+                type="text"
+                v-model="imagePath"
+                class="input-form mt-3"
+                @input="saveDataImage"
+                placeholder="Path for save image"
             />
           </div>
 
 
-          <div class="d-flex faq flex-column col-md col-lg-2 col-sm-6 align-items-center align-self-center justify-content-center  order-lg-3 order-sm-3 order-3">
+          <div
+              class="d-flex faq flex-column col-md col-lg-2 col-sm-6 align-items-center align-self-center justify-content-center  order-lg-3 order-sm-3 order-3">
             <button class="btn btn-faq bold-text font-size-32"
-              @click="faqOpen = !faqOpen"
-             >
-                FAQ
+                    @click="faqOpen = !faqOpen"
+            >
+              FAQ
             </button>
           </div>
         </div>
       </div>
       <div
-        class="containter d-flex flex-column justify-content-center align-items-center" >
+          class="containter d-flex flex-column justify-content-center align-items-center">
         <div class="btn-block d-flex flex-column">
           <div class="d-flex justify-content-center align-items-center">
             <button
-              class="big-btn mt-3 col-12 align-items-center"
-              :class="{
+                class="big-btn mt-3 col-12 align-items-center"
+                :class="{
                 btnActive: btnActive && $store.state.scriptRunning,
                 btnDisabled: !$store.state.scriptRunning,
               }"
-              @click="btnClicked" >
-              <p class="bold-text font-size-22 text-white text-center btnDisables" >
+                @click="btnClicked">
+              <p class="bold-text font-size-22 text-white text-center btnDisables">
                 {{
                   btnActive && $store.state.scriptRunning
-                    ? "Running!"
-                    : "Make previews!"
+                      ? "Running!"
+                      : "Make previews!"
                 }}
               </p>
               <div class="popUp" v-if="showPopUp">
@@ -181,17 +190,17 @@ export default {
           </div>
           <div v-if="btnActive">
             <div
-              class="d-flex col-12 justify-content-center align-items-center" >
+                class="d-flex col-12 justify-content-center align-items-center">
               <button
-                class="big-btn mt-3"
-                @click="showProgress = !showProgress">
+                  class="big-btn mt-3"
+                  @click="showProgress = !showProgress">
                 <p class="bold-text font-size-22 font-color-dark text-center">
                   <span v-if="showProgress"
-                    class="text-white">
+                        class="text-white">
                       Show Progress
                   </span>
                   <span v-else
-                    class="text-white">
+                        class="text-white">
                       Show less
                   </span>
                 </p>
@@ -201,32 +210,32 @@ export default {
             <div v-if="!showProgress" class="preview-window mt-5">
               <div v-if="$store.state.scriptRunning">
                 <progressBar
-                  class="my-4 d-flex justify-content-center align-items-center"
+                    class="my-4 d-flex justify-content-center align-items-center"
                 >
                 </progressBar>
               </div>
               <h2
-                v-if="!$store.state.scriptRunning"
-                class="justify-content-center align-items-center text-center my-4 bold-text font-size-24 font-color-pink text-uppercase"
+                  v-if="!$store.state.scriptRunning"
+                  class="justify-content-center align-items-center text-center my-4 bold-text font-size-24 font-color-pink text-uppercase"
               >
                 Finish!
               </h2>
               <div class="container w-100">
                 <div class="row justify-content-center align-items-center">
                   <div
-                    class="card col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-center mt-4 mx-3"
-                    v-for="model in $store.state.modelsList"
-                    :key="model.name">
+                      class="card col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-center mt-4 mx-3"
+                      v-for="model in $store.state.modelsList"
+                      :key="model.name">
                     <img
-                      class="model-image my-3"
-                      v-if="model.image"
-                      :src="model.image" />
+                        class="model-image my-3"
+                        v-if="model.image"
+                        :src="model.image"/>
                     <p
-                      class="font-size-14 font-color-dark medium-text text-center" >
+                        class="font-size-14 font-color-dark medium-text text-center">
                       {{ model.name }}
                     </p>
                     <p
-                      class="font-size-14 font-color-pink text-center medium-text">
+                        class="font-size-14 font-color-pink text-center medium-text">
                       {{ model.title }}
                     </p>
                   </div>
@@ -266,10 +275,9 @@ export default {
 }
 
 
-.btn-faq:hover, btn-faq:active{
+.btn-faq:hover, btn-faq:active {
   background-color: #c97191;
 }
-
 
 
 input {
@@ -346,12 +354,12 @@ p {
   background-color: #c97191;
   background-size: 200% 100%;
   background-image: linear-gradient(
-    to right,
-    #de93af 0%,
-    #a97ec2 25%,
-    #de93af 50%,
-    #a97ec2 75%,
-    #de93af 100%
+      to right,
+      #de93af 0%,
+      #a97ec2 25%,
+      #de93af 50%,
+      #a97ec2 75%,
+      #de93af 100%
   );
   transition: background-position 1s linear;
   animation: gradientAnimation 6s linear infinite;
