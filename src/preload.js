@@ -18,11 +18,11 @@ contextBridge.exposeInMainWorld('API', {
         console.log('Handle scriptRunning invoked_2 modelList')
         ipcRenderer.invoke('modelsListEvent', data)
     },
-    scriptRunning: (data) => {
+    /*scriptRunning: (data) => {
         console.log('Handle scriptRunning invoked_3')
         ipcRenderer.invoke('scriptRunningEvent', data)
         console.log('Handle scriptRunning invoked_4 scriptRunningEvent')
-    },
+    },*/
 
     onScriptRunning: (callback) => ipcRenderer.on('scriptRunningEvent', (_event, value) => callback(value)),
     onModelList: (callback) => ipcRenderer.on('modelsListEvent', (_event, value) => callback(value))

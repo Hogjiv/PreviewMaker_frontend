@@ -4,7 +4,8 @@ import {app, protocol, BrowserWindow, ipcMain} from 'electron';
 import {createProtocol} from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, {VUEJS3_DEVTOOLS} from 'electron-devtools-installer';
 import fs from "fs";
-import { bigImage } from "./logic.js";
+import {bigImage} from "./logic.js";
+
 const jimp = require("jimp");
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
@@ -30,14 +31,9 @@ async function createWindow() {
         }
     });
 
-    /*const win = new BrowserWindow({ width: 800, height: 1500 })
-    win.loadURL('https://3ddd.ru/3dmodels?subcat=biliard&cat=drugie')
-*/
-
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-        console.log("!!!!!@@@@@@")
         if (!process.env.IS_TEST) win.webContents.openDevTools();
     } else {
         createProtocol('app');
@@ -67,10 +63,17 @@ app.whenReady().then(() => {
         async function startScript(data) {
             try {
                 event.sender.send('scriptRunningEvent', true);
-                // define all main consts
                 const {modelPath, imagePath, smallPreview, titleText, softScan = false, hardScan = true} = data
-                console.log("SERVER Received modelPath: step1", modelPath);
-                console.log("SERVER Received imagePath: step1", imagePath);
+                /* console.log("SERVER Received modelPath: step1", modelPath);
+                 console.log("SERVER Received imagePath: step1", imagePath);*/
+
+
+                // check for excluded files
+                const excluded = [...(softScan && cache ? cache.map(el => el.model) : []), 'scan.json'];
+                /* console.log(excluded, "reading JSON");*/
+
+                const modelsList = await ScanFiles(modelPath, excluded)
+                console.log(modelsList, "SERVER models recieved, SCANFILE func going...")
 
                 //create cash and check if it exist. If yes, an attempt is made to read the JSON.
                 const cachePath = imagePath + '/scan.json';
@@ -105,19 +108,19 @@ app.whenReady().then(() => {
                         console.log("dskjfhdksjfhkds!!@@#");*/
                     }
                 }
-             /*   if (cache) {
-                    for (let i = 0; i < cache.length; i++) {
-                        const img = await jimp.read(cache[i].path)
-                        const img64 = await img.getBase64Async(jimp.MIME_PNG)
-                        recached.push({
-                            ...cache[i],
-                            ready: true,
-                            image: img64
-                        })
-                        console.log("JIMP here", img64, img)
-                        console.log("dskjfhdksjfhkds!!@@#")
-                    }
-                }*/
+                /*   if (cache) {
+                       for (let i = 0; i < cache.length; i++) {
+                           const img = await jimp.read(cache[i].path)
+                           const img64 = await img.getBase64Async(jimp.MIME_PNG)
+                           recached.push({
+                               ...cache[i],
+                               ready: true,
+                               image: img64
+                           })
+                           console.log("JIMP here", img64, img)
+                           console.log("dskjfhdksjfhkds!!@@#")
+                       }
+                   }*/
                 if (!softScan && !hardScan && cache) {
                     event.sender.send('scriptRunningEvent', true);
                     console.log('2 step, scriptRunningEvent');
@@ -127,17 +130,11 @@ app.whenReady().then(() => {
                 }
 
 
-                // check for excluded files
-                const excluded = [...(softScan && cache ? cache.map(el => el.model) : []), 'scan.json'];
-               /* console.log(excluded, "reading JSON");*/
-
-                const modelsList = await ScanFiles(modelPath, excluded)
-                console.log(modelsList, "SERVER models recieved, SCANFILE func going...")
-
                 event.sender.send('modelsListEvent', [...recached, ...modelsList]);
                 console.log('SERVER here is emit cached in Script')
 
                 const completeList = await bigImage(modelsList, imagePath, smallPreview, titleText, event);
+
 
                 console.log(completeList, " ")
                 // JSON writing
@@ -159,6 +156,7 @@ app.whenReady().then(() => {
                 //res.status(500).send("Can't make preview");
             }
         }
+
         return data;
     });
     console.log('2 step, between');

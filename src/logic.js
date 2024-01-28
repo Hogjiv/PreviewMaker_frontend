@@ -21,9 +21,9 @@ async function ScanFiles(modelPath, excluded = []) {
                 uniqueFiles.push(file);
                 return true;
             })
-       // console.log("excluded files", excluded)
-     //   const modelCounter = replacedFiles.length;
-   /*     console.log("replaced names of scanned models", replacedFiles)*/
+        // console.log("excluded files", excluded)
+        //   const modelCounter = replacedFiles.length;
+        /*     console.log("replaced names of scanned models", replacedFiles)*/
         /*console.log(" total read" + modelCounter, "step 2");*/
         return replacedFiles;
     } catch (err) {
@@ -32,30 +32,66 @@ async function ScanFiles(modelPath, excluded = []) {
     }
 }
 
-//async function bigImage(modelName, imagePath, titleText, smallPreview, socket) {
-async function bigImage(modelName, imagePath, titleText, smallPreview, socket) {
-    /*    console.log(modelName, imagePath, titleText, smallPreview,  socket)*/
 
-    const modelData = {
-        title: "Your Model Title",
-        number: "507887.56f3be83803f0",
-    };
+// Define bigImage function
+async function bigImage(modelsList, imagePath, titleText, smallPreview, socket) {
+    // Loop through modelsList and call postData for each model
+    for (const modelName of modelsList) {
+        // Use a flag to track if at least one image is found
+        let imageFound = false;
+        await postData(modelName);
 
-    async function postData() {
-        try {
-            const response = await axios.post("https://3ddd.ru/api/models",{
-                query: modelData.number
-            });
-        /*    console.log(response.data.data.models);*/
-            const slug = response.data.data.models[0].slug
-            console.log(slug, "66666666");
+        // If imageFound is true, proceed to the next model
+        if (imageFound) {
+            continue;
+        }
 
-            const images = response.data.data.models[0].images
-            console.log(images, "111111111")
-        } catch (error) {
-            console.error(error);
+        // Define postData function
+        async function postData(modelName) {
+            try {
+                // Make an API request to get model data
+                const response = await axios.post("https://3ddd.ru/api/models", {
+                    query: modelName
+                });
+
+                // Define possible backend URLs
+                const backends3dd = [
+                    "https://b5.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/",
+                    "https://b6.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/",
+                    "https://b7.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/"
+                ];
+
+                // Extract model data and the first image
+                const modelData = response.data.data.models[0];
+                const firstImage = modelData.images[0];
+                const slug = modelData.slug;
+                console.log(`Slug: ${slug}`);
+
+                // Check if the first image exists and the response is successful
+                if (firstImage && response.status >= 200 && response.status < 300) {
+                    // Iterate over backend URLs and construct full image URLs
+                    for (const backend of backends3dd) {
+                        const fullImageUrl = `${backend}${firstImage.web_path}`;
+                        console.log(fullImageUrl);
+
+                        // Set imageFound to true and break the loop
+                        imageFound = true;
+                        break;
+                    }
+                } else {
+                    console.log(`No image found for model: ${modelName}`);
+                }
+            } catch (error) {
+                // Handle errors, check if response status is 404
+                if (error.response && error.response.status === 404) {
+                    console.log(`No image found for model: ${modelName}`);
+                } else {
+                    console.error(error);
+                }
+            }
         }
     }
-    await postData( );
 }
+
+
 module.exports = {ScanFiles, bigImage};
