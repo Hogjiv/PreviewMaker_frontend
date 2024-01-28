@@ -20,9 +20,9 @@ const store = createStore({
         };
     },
     mutations: {
-       /* clickedEvent(state) {
-            console.log("received", state);
-        },*/
+        /* clickedEvent(state) {
+             console.log("received", state);
+         },*/
         pathSaveModel(state, modelPath) {
             console.log("model path STORE", state);
             state.pathModel = modelPath;
@@ -124,14 +124,14 @@ const store = createStore({
          },*/
 
 
-      /*  async scriptRunning(store) {
-            try {
-                const isRunning = await window.API.scriptRunning();
-                store.commit("setScriptRunning", isRunning);
-            } catch (error) {
-                console.error("Error in running script:", error);
-            }
-        },*/
+        /*  async scriptRunning(store) {
+              try {
+                  const isRunning = await window.API.scriptRunning();
+                  store.commit("setScriptRunning", isRunning);
+              } catch (error) {
+                  console.error("Error in running script:", error);
+              }
+          },*/
 
         electronConnect() {
             // const socket = io(BASE_URL);
@@ -139,11 +139,11 @@ const store = createStore({
             window.API.onScriptRunning(next => {
                 console.log('onScriptRunning from store/ELECTRON CONNECT', next)
             })
-              window.API.onModelList(list => {
-                  console.log('modelList from store/ELECTRON CONNECT', list)
-                  store.commit("setModeslList", list)
-                  console.log(list, "modelsList!!!!!!!!!")
-              })
+            window.API.onModelList(list => {
+                console.log('modelList from store/ELECTRON CONNECT', list)
+                store.commit("setModeslList", list)
+                console.log(list, "modelsList!!!!!!!!!")
+            })
 
 
 //      socket.on("connect", () => {

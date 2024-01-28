@@ -5,8 +5,6 @@ import {createProtocol} from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, {VUEJS3_DEVTOOLS} from 'electron-devtools-installer';
 import fs from "fs";
 import { bigImage } from "./logic.js";
-
-
 const jimp = require("jimp");
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
@@ -32,14 +30,20 @@ async function createWindow() {
         }
     });
 
+    /*const win = new BrowserWindow({ width: 800, height: 1500 })
+    win.loadURL('https://3ddd.ru/3dmodels?subcat=biliard&cat=drugie')
+*/
+
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+        console.log("!!!!!@@@@@@")
         if (!process.env.IS_TEST) win.webContents.openDevTools();
     } else {
         createProtocol('app');
         // Load the index.html when not in development
         win.loadURL('app://./index.html');
+        console.log("!!!!!??????")
     }
 }
 
@@ -67,7 +71,6 @@ app.whenReady().then(() => {
                 const {modelPath, imagePath, smallPreview, titleText, softScan = false, hardScan = true} = data
                 console.log("SERVER Received modelPath: step1", modelPath);
                 console.log("SERVER Received imagePath: step1", imagePath);
-
 
                 //create cash and check if it exist. If yes, an attempt is made to read the JSON.
                 const cachePath = imagePath + '/scan.json';
@@ -98,8 +101,8 @@ app.whenReady().then(() => {
                             image: img64
                         });
 
-                        console.log("JIMP here", img64, img);
-                        console.log("dskjfhdksjfhkds!!@@#");
+                        /*console.log("JIMP here", img64, img);
+                        console.log("dskjfhdksjfhkds!!@@#");*/
                     }
                 }
              /*   if (cache) {
@@ -126,17 +129,17 @@ app.whenReady().then(() => {
 
                 // check for excluded files
                 const excluded = [...(softScan && cache ? cache.map(el => el.model) : []), 'scan.json'];
-                console.log(excluded, "WHAT???");
+               /* console.log(excluded, "reading JSON");*/
 
                 const modelsList = await ScanFiles(modelPath, excluded)
                 console.log(modelsList, "SERVER models recieved, SCANFILE func going...")
 
                 event.sender.send('modelsListEvent', [...recached, ...modelsList]);
-                //sock.emit('modelsList', [...recached, ...modelsList])
                 console.log('SERVER here is emit cached in Script')
 
-                const completeList = await bigImage(modelsList, imagePath, smallPreview, titleText, event)
+                const completeList = await bigImage(modelsList, imagePath, smallPreview, titleText, event);
 
+                console.log(completeList, " ")
                 // JSON writing
                 let old = null
                 try {

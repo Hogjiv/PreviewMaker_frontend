@@ -5,10 +5,10 @@ contextBridge.exposeInMainWorld('API', {
     chrome: () => process.versions.chrome,
     electron: () => process.versions.electron,
 
-    test: (data) => {
+    /*test: (data) => {
         ipcRenderer.invoke('ping', data)
         console.log("invoke test")
-    },
+    },*/
     startScript: (data) => {
         console.log('Handle scriptRunning invoked_1')
         ipcRenderer.invoke('startScriptEvent', data)
