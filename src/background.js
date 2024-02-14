@@ -121,22 +121,23 @@ app.whenReady().then(() => {
                            console.log("dskjfhdksjfhkds!!@@#")
                        }
                    }*/
+                event.sender.send('modelsListEvent', [...recached, ...modelsList]);
+                console.log('SERVER here is emit cached in Script')
+
                 if (!softScan && !hardScan && cache) {
-                    event.sender.send('scriptRunningEvent', true);
-                    console.log('2 step, scriptRunningEvent');
-                    event.sender.send('modelsListEvent', true);
-                    console.log('3 step, modelsListEvent');
+                  
+                    event.sender.send('modelsListEvent', recached)
+                    event.sender.send('scriptRunningEvent', false); 
+                    // event.sender.send('modelsListEvent', true); 
                     return
                 }
 
 
-                event.sender.send('modelsListEvent', [...recached, ...modelsList]);
-                console.log('SERVER here is emit cached in Script')
+           
+                const completeList = await bigImage(modelsList, imagePath, titleText, event.sender)
+                //const completeList = await bigImage(modelsList, imagePath, titleText, event.sender);
 
-                const completeList = await bigImage(modelsList, imagePath, smallPreview, titleText, event);
-
-
-                console.log(completeList, " ")
+                console.log(completeList, " 999999999999999999999999999999")
                 // JSON writing
                 let old = null
                 try {
@@ -150,7 +151,7 @@ app.whenReady().then(() => {
                 fs.writeFileSync(cachePath, JSON.stringify(old))
                 console.log('SERVER ..wwait writing to json..')
                 event.sender.send('scriptRunningEvent', false);
-                //sock.emit('scriptRunning', false)
+                 
             } catch (err) {
                 console.error(err);
                 //res.status(500).send("Can't make preview");

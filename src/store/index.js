@@ -1,4 +1,5 @@
 import {createStore} from "vuex";
+
 // import axios from "axios";
 // import io from "socket.io-client";
 //import {  ipcRenderer  } from 'electron'
@@ -20,9 +21,9 @@ const store = createStore({
         };
     },
     mutations: {
-       /* clickedEvent(state) {
-            console.log("received", state);
-        },*/
+        /* clickedEvent(state) {
+             console.log("received", state);
+         },*/
         pathSaveModel(state, modelPath) {
             console.log("model path STORE", state);
             state.pathModel = modelPath;
@@ -38,7 +39,7 @@ const store = createStore({
         setSocket(state, next) {
             state.socket = next;
         },
-        setScriptRunning(state, next) {
+           setScriptRunning(state, next) {
             console.log("setScriptRunning mutation")
             state.scriptRunning = next;
         },
@@ -101,18 +102,11 @@ const store = createStore({
             //commit("pathSaveModel", data.modelPath);
             commit("pathSaveModel", data.modelPath);
             console.log('commmit Model store/ELECTRON')
-            /*window.API.onModelList(next => {
-                console.log('modelList from store/ELECTRON CONNECT', next)
-            })
-*/
 
             commit("pathSaveImage", data.imagePath);
             console.log('commmit Image store/ELECTRON')
         },
-        /* window.API.onModelList(next => {
-             console.log('modelList???2222', next)
-         }),
- */
+
         /* async modelsList(store) {
              try {
                  const list = await window.API.modelsList();
@@ -124,31 +118,44 @@ const store = createStore({
          },*/
 
 
-      /*  async scriptRunning(store) {
-            try {
-                const isRunning = await window.API.scriptRunning();
-                store.commit("setScriptRunning", isRunning);
-            } catch (error) {
-                console.error("Error in running script:", error);
-            }
-        },*/
+        /*  async scriptRunning(store) {
+              try {
+                  const isRunning = await window.API.scriptRunning();
+                  store.commit("setScriptRunning", isRunning);
+              } catch (error) {
+                  console.error("Error in running script:", error);
+              }
+          },*/
 
         electronConnect() {
             // const socket = io(BASE_URL);
+            // socket.on('scriptRunning', isRunning => {
+            //     store.commit("setScriptRunning", isRunning)
+            //   })
 
-            window.API.onScriptRunning(next => {
-                console.log('onScriptRunning from store/ELECTRON CONNECT', next)
+           
+            // window.API.onScriptRunning(next => {
+            //     console.log('onScriptRunning from store/ELECTRON CONNECT', next)
+
+            // })
+            window.API.onScriptRunning(isRunning => {
+                console.log('onScriptRunning STORE', isRunning)
+                store.commit("setScriptRunning", isRunning)
             })
-              window.API.onModelList(list => {
-                  console.log('modelList from store/ELECTRON CONNECT', list)
-                  store.commit("setModeslList", list)
-                  console.log(list, "modelsList!!!!!!!!!")
-              })
+            window.API.onModelList(list => { 
+                store.commit("setModeslList", list) 
+            })
+            window.API.onModelImage(data => { 
+                store.commit('modelImage', data)
+            })
+            window.API.onSetlList(list => { 
+                store.commit("setModeslList", list)
+            })
+              /*  ipcMain.on('modelImage', (event, data) => {
+                    console.log('Received modelImage data:', data);
+                    store.commit('modelImage', data)
+                });*/
 
-
-//      socket.on("connect", () => {
-//        console.log("IO CONNECTED!");
-//      });
             /*
                   socket.on('scriptRunning', isRunning => {
                     console.log("@@@run")

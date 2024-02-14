@@ -24,7 +24,7 @@ export default {
       };
     },
     textToShow() {
-      console.log("s2")
+      console.log("Progress bar...")
       return this.totalReadyModels.notReadyModels === 0;
     },
   },

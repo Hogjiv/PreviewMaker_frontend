@@ -16,7 +16,7 @@ async function ScanFiles(modelPath, excluded = []) {
     // Use a Set to keep track of unique file names
     const uniqueFiles = [];
 
-    const replacedFiles = files       
+    const replacedFiles = files
     .map((file) => file.replace(/[-(].*|\s+$/gi, "").replace(/\.(rar|zip|jpeg|png|jpg)$/i, "").trim())
       .filter((file) => {
         if (excluded.includes(file)) {
@@ -24,15 +24,15 @@ async function ScanFiles(modelPath, excluded = []) {
         }
         //console.log(excluded, "excluded content")
         if (uniqueFiles.includes(file)) {
-          return false; 
+          return false;
         }
-        uniqueFiles.push(file); 
-        return true; 
+        uniqueFiles.push(file);
+        return true;
       })
     //console.log(replacedFiles, "clean zip/rar");
     const modelCounter = replacedFiles.length;
     //console.log(modelCounter);
-    
+
     console.log(replacedFiles, "SCRIPTINPROGRESS total read" + modelCounter);
 
     return replacedFiles;
@@ -41,7 +41,7 @@ async function ScanFiles(modelPath, excluded = []) {
   }
 }
 // https://3ddd.ru/3dmodels?query=2438678.5cd5de4309d4f&order=relevance
- 
+
 async function bigImage(modelName, imagePath, titleText, smallPreview,  socket) {
   const result = []
 
@@ -57,9 +57,9 @@ async function bigImage(modelName, imagePath, titleText, smallPreview,  socket) 
   for (const model of modelName) {
     await page.goto(`https://3ddd.ru/3dmodels?query=${encodeURIComponent(model)}&order=relevance`, { waitUntil: "load", timeout: 10000 });
     const pageUrl = page.url();
-  
+
     console.log("SCRIPTINPROGRESS Current page URL:", pageUrl);
-  
+
     try {
       await page.waitForSelector(".model-image ", { timeout: 30000 });
     } catch (err) {
@@ -77,7 +77,7 @@ async function bigImage(modelName, imagePath, titleText, smallPreview,  socket) 
     });
     // waiting load page
     await page.waitForTimeout(3000);
-  
+
     // go to page with image
     if (linkHref) {
       try {
@@ -105,14 +105,14 @@ async function bigImage(modelName, imagePath, titleText, smallPreview,  socket) 
 
       // make rule for create new image name
       const rxName = /\/(\d+\.[a-zA-Z0-9]+)/;
-    
+
       const imageNames = imageUrl.match(rxName)[1];
       const imageName = imageNames;
       const newImagePath = `${imagePath}/${imageName}.jpeg`;
 
       try {
         const response = await axios.get(imageUrl,  {
-          responseType: "arraybuffer", 
+          responseType: "arraybuffer",
           timeout: 30000,
         });
         const imageBinaryData = response.data
@@ -123,11 +123,15 @@ async function bigImage(modelName, imagePath, titleText, smallPreview,  socket) 
         }
         await compressedImage.writeAsync(newImagePath)
         const img64 = await compressedImage.getBase64Async(jimp.MIME_PNG)
+
+
         socket.emit('modelImage', {
           modelName: model,
           title: titleText,
           image: img64
         })
+
+
         result.push({
           model,
           title: titleText,
@@ -138,7 +142,7 @@ async function bigImage(modelName, imagePath, titleText, smallPreview,  socket) 
       }
     } else {
     }
-    socket.emit("modelSaved", model); 
+    socket.emit("modelSaved", model);
   }
   await browser.close();
 
