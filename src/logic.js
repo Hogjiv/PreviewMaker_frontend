@@ -125,8 +125,9 @@ async function bigImage(modelsList, imagePath, titleText, socket) {
           console.error(error);
         }
       }
-    }
+    } 
   }
+  return result
 }
 
 module.exports = { ScanFiles, bigImage };

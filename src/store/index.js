@@ -57,10 +57,7 @@ const store = createStore({
         // setShowResult(state, value) {
         //   state.showResult = value;
         // },
-//    ioSend(state, bigPreview) {
-//      console.log("bigPreview");
-//      state.bigPreview = bigPreview;
-//    },
+
         updateModelsList(state, data) {
             state.modelsList = data.map(el => {
                 console.log('mutation setModel list')
@@ -75,6 +72,7 @@ const store = createStore({
             });
         },
         modelImage(state, data) {
+            console.log("modelImage, 22222")
             state.modelsList = state.modelsList.map(el => {
                 if (el.name !== data.modelName) return el;
                 el.title = data.title
@@ -147,6 +145,7 @@ const store = createStore({
             })
             window.API.onModelImage(data => { 
                 store.commit('modelImage', data)
+                console.log("onModelImage, 3333")
             })
             window.API.onSetlList(list => { 
                 store.commit("setModeslList", list)
@@ -157,11 +156,7 @@ const store = createStore({
                 });*/
 
             /*
-                  socket.on('scriptRunning', isRunning => {
-                    console.log("@@@run")
-                    store.commit("setScriptRunning", isRunning)
-                  })*/
-
+                
 //      socket.on("modelsList", list => {
 //        store.commit("setModeslList", list)
 //        console.log(list, "modelsList")
