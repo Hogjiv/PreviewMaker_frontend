@@ -21,8 +21,9 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    minWidth:450,
     webPreferences: {
-      preload: path.join(__dirname, "../src/preload.js"), 
+      preload: path.join(__dirname, "../src/preload.js"),
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
     },
@@ -52,8 +53,6 @@ app.on("activate", () => {
 
 app.whenReady().then(() => {
   ipcMain.handle("startScriptEvent", async (event, data) => {
-    console.log(" 1 step, startScript");
-
     await startScript(data);
     async function startScript(data) {
       try {
@@ -61,21 +60,23 @@ app.whenReady().then(() => {
         const {
           modelPath,
           imagePath,
-          smallPreview,
           titleText,
           softScan = false,
           hardScan = true,
-        } = data; 
+        } = data;
 
-        //create cash and check if it exist. If yes, an attempt is made to read the JSON.
+        let cache = [];
+
         const cachePath = imagePath + "/scan.json";
-        console.log("STEP 3 , cachePath is ", cachePath);
-        let cache = null;
 
         if (fs.existsSync(cachePath)) {
           try {
-            cache = JSON.parse(fs.readFileSync(cachePath).toString());
-            console.log("HERE")
+            if (softScan === false && hardScan === true) {
+              cache = [];
+            }
+            if (hardScan === false) {
+              cache = JSON.parse(fs.readFileSync(cachePath).toString());
+            }
           } catch (err) {
             console.log("SERVER reading cache error!", cachePath, err);
             cache = null;
@@ -83,19 +84,34 @@ app.whenReady().then(() => {
         }
 
         const recached = [];
-        if (cache) {
-          for (let i = 0; i < cache.length; i++) {
-            // const img = await jimp.read(cache[i].path);
-            // const img64 = await img.getBase64Async(jimp.MIME_PNG);
-            // Заменяем jimp на console.log
-            const img64 = `base64_image_${i}`;
-            const img = `image_${i}`;
 
-            recached.push({
-              ...cache[i],
-              ready: true,
-              image: img64,
-            });
+        if (cache) {
+          try {
+            for (let i = 0; i < cache.length; i++) {
+              const tests = [
+                modelPath + "/" + cache[i].model,
+                modelPath + "/" + cache[i].model + ".zip",
+                modelPath + "/" + cache[i].model + ".rar",
+              ];
+              const imgExists = fs.existsSync(cache[i].path);
+              if (!modelExists) {
+                continue;
+              }
+              console.log("model exists", cache[i].model);
+              if (!imgExists) {
+                continue;
+              }
+              const img = await jimp.read(cache[i].path);
+              const img64 = await img.getBase64Async(jimp.MIME_PNG);
+
+              recached.push({
+                ...cache[i],
+                ready: true,
+                image: img64,
+              });
+            }
+          } catch (err) {
+            console.log("problem", err);
           }
         }
         if (!softScan && !hardScan && cache) {
@@ -105,15 +121,18 @@ app.whenReady().then(() => {
           return;
         }
 
-        // check for excluded files
         const excluded = [
-          ...(softScan && cache ? cache.map((el) => el.model) : []),
+          ...(softScan && recached.length
+            ? recached.map((el) => el.model)
+            : []),
           "scan.json",
         ];
+        console.log(excluded, "-----------------------");
 
         const modelsList = await ScanFiles(modelPath, excluded);
-        event.sender.send("modelsListEvent", [...recached, ...modelsList]);
         console.log(modelsList, "this is modelsList ????");
+
+        event.sender.send("modelsListEvent", [...recached, ...modelsList]);
 
         const completeList = await bigImage(
           modelsList,
@@ -121,31 +140,29 @@ app.whenReady().then(() => {
           titleText,
           event.sender
         );
-        
 
-        console.log(completeList, "this is complete list !!!");
-        // JSON writing
-        let old = null;
-        try {
-          old = JSON.parse(fs.readFileSync(cachePath).toString());
-        } catch (e) {
-          old = null;
-        }
-
-        console.log(old, "this is OLD CASHE ????");
-        old = [...(old || []), ...completeList];
-        fs.writeFileSync(cachePath, JSON.stringify(old));
+        const nextCache = [
+          ...recached.map((el) => ({
+            model: el.model,
+            path: el.path,
+            title: el.title,
+          })),
+          ...completeList,
+        ];
+        console.log(nextCache);
+        fs.writeFileSync(cachePath, JSON.stringify(nextCache));
+        console.log("SERVER ..wwait writing to json..");
 
         event.sender.send("scriptRunningEvent", false);
       } catch (err) {
         console.error(err);
-        //res.status(500).send("Can't make preview");
       }
     }
     console.log("THE END");
     return data;
   });
 });
+
 app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools

@@ -114,4 +114,30 @@ position: absolute;
 
 .font-color-gray {
 color: #B9B9B9}
+
+
+
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #6e6e6e;
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #2c2c2c;
+}
+
+
+.scrollbar {
+    scrollbar-color: #3f3f3f;
+    width: 8px;
+}
+
+
+.scrollbar-corner {
+  background-color: #6e6e6e;
+}
 </style>

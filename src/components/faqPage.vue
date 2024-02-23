@@ -101,11 +101,7 @@ export default {
   background-color: pink !important;
 }
 
-.icon-exit {
-}
-
-.screen-block {
-  background-color: #0c0c0cbf;
+.screen-block { 
   width: 100vw;
   height: 100vh;
 z-index: 1;

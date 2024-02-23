@@ -106,32 +106,54 @@ export default {
   <div class="header d-flex justify-content-center align-items-center">
     <h2 class="bold-text font-color-dark text-uppercase">Preview maker</h2>
   </div>
+ 
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <div
       v-if="faqOpen"
-      class="faqBlock d-flex col-lg align-items-center align-self-center justify-content-center">
+      class="faqBlock d-flex col-lg align-items-center align-self-center justify-content-center position-fixed-lg">
     <faqPage
         @btnClosed='btnClosed'
     >
-
     </faqPage>
-  </div>
+  </div> 
 
   <div class="fluid-container d-flex flex-row">
     <div class="container-lg d-flex flex-column justify-content-center align-items-center">
       <div class="container-lg d-flex flex-row justify-content-center align-items-center menu">
-        <div class="row col-12 d-flex justify-content-center">
-          <div
-              class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2">
-            <div class="d-flex mb-2 align-self-lg-start align-self-sm-center align-self-center">
+        <div class="row col-12 d-flex justify-content-center "> 
+             <div class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2  ">  
+            <div class="d-flex mb-2  ">
               <checkBox v-model="softScan"/>
-              <p class="font-size-16">
+              <p class="font-size-16 mx-2  ">
                 Soft scan
               </p>
             </div>
-            <div class="d-flex align-self-lg-start align-self-sm-center align-self-center">
+            <div class="d-flex  ">
+              <!-- <div class="d-flex align-self-lg-start align-self-sm-center align-self-center"> -->
               <checkBox v-model="hardScan"/>
-              <p class="font-size-16">
+              <p class="font-size-16 mx-1    ">
                 Hard scan
               </p>
             </div>
@@ -249,14 +271,19 @@ export default {
   </div>
 </template>
 <style>
+.gg {
+  background-color: orange;
+}
 .faqBlock {
   top: 0;
   right: 0;
   bottom: 0;
   z-index: 1;
-  position: fixed;
+  position: absolute;
+   /* position: fixed;   */
+ width: 300px;  
 }
-
+ 
 @keyframes slideIn {
   from {
     transform: translateX(-20%);
