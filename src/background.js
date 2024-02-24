@@ -91,6 +91,7 @@ app.whenReady().then(() => {
                 modelPath + "/" + cache[i].model + ".zip",
                 modelPath + "/" + cache[i].model + ".rar",
               ];
+              const modelExists = tests.some(path => fs.existsSync(path))
               const imgExists = fs.existsSync(cache[i].path);
               if (!modelExists) {
                 continue;
