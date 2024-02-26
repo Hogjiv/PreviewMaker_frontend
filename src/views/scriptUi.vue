@@ -108,35 +108,30 @@ export default {
   </div>
 
   <div v-if="faqOpen">
-     <div class="modal d-flex"
-      id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal d-flex" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <faqPage @btnClosed='btnClosed'>
         sdf
       </faqPage>
     </div>
   </div>
- 
+
 
   <div class="fluid-container d-flex flex-row">
     <div class="container-lg d-flex flex-column justify-content-center align-items-center">
       <div class="container-lg d-flex flex-row justify-content-center align-items-center menu">
         <div class="row col-12 d-flex justify-content-center ">
           <div
-            class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2  ">
-            <div class="d-flex mb-2  ">
+            class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2 mt-4 mt-md-0 mt-lg-0   ">
+            <div class="d-flex mb-3  mb-md-3 mb-lg-3">
               <checkBox v-model="softScan" />
-              <p class="font-size-16 mx-2  ">
-                Soft scan
-              </p>
+              <p class="font-size-16 mx-2">Soft scan</p>
             </div>
             <div class="d-flex  ">
-              <!-- <div class="d-flex align-self-lg-start align-self-sm-center align-self-center"> -->
               <checkBox v-model="hardScan" />
-              <p class="font-size-16 mx-1    ">
-                Hard scan
-              </p>
+              <p class="font-size-16 mx-1">Hard scan</p>
             </div>
           </div>
+
           <div
             class="d-flex flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 order-lg-2 order-sm-1 order-1">
             <input type="text" v-model="modelPath" class="input-form" @input="saveDataModel"
@@ -223,7 +218,7 @@ export default {
   display: flex;
   right: 0;
   left: auto;
-  max-width: 450px;   
+  max-width: 450px;
 }
 
 .hh {
@@ -431,4 +426,5 @@ p {
     opacity: 0;
     display: none;
   }
-}</style>
+}
+</style>
