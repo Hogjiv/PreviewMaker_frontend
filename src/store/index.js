@@ -58,25 +58,15 @@ const store = createStore({
         //   state.showResult = value;
         // },
 
-        updateModelsList(state, data) {
-            state.modelsList = data.map(el => {
-                console.log('mutation setModel list')
-                if (typeof el === 'object') return el
-                return {
-                    name: el,
-                    ready: false,
-                    title: "",
-                    image: null
-                }
-
-            });
-        },
+     //Эта мутация принимает данные изображения (название модели, заголовок и само изображение) и обновляет соответствующий объект в массиве modelsList в состоянии приложения.
         modelImage(state, data) {
             console.log("modelImage, 22222")
             state.modelsList = state.modelsList.map(el => {
                 if (el.name !== data.modelName) return el;
                 el.title = data.title
+                console.log("^^^^^^^^^^^^", data.title)
                 el.image = data.image
+                console.log("^^^^^^^^^^^^", data.image)
                 return el
             })
         },
@@ -102,7 +92,7 @@ const store = createStore({
             console.log('commmit Model store/ELECTRON')
 
             commit("pathSaveImage", data.imagePath);
-            console.log('commmit Image store/ELECTRON')
+            console.log('Save image???')
         },
 
         /* async modelsList(store) {
@@ -173,11 +163,6 @@ const store = createStore({
         async previewStatus() {
         },
     },
-    getters: {
-        getModelNames(state) {
-            return state.modelNameData;
-        }
-    }
 });
 
 export default store;

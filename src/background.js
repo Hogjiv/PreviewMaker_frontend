@@ -6,7 +6,7 @@ import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import fs from "fs";
 import { bigImage } from "./logic.js";
 
-const jimp = require("jimp");
+const jimp = require("jimp").default;
 const isDevelopment = process.env.NODE_ENV !== "production";
 const path = require("path");
 const { ScanFiles } = require("./logic.js");

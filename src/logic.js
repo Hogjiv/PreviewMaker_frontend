@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { readdir } = require("fs/promises");
 const axios = require("axios").default;
-const jimp = require("jimp");
+const jimp = require("jimp").default;
 // const { ipcRenderer } = require('electron');
 // const {ipcMain} = require ('electron');
 
@@ -38,7 +38,10 @@ async function ScanFiles(modelPath, excluded = []) {
   }
 }
 
-async function bigImage(modelsList, imagePath, titleText, socket) {
+async function bigImage(modelsList, imagePath, titleText,  eventSender) {
+  console.log("88888image path", imagePath);
+  console.log("888888titleText", titleText);
+  console.log("8888modelsList", modelsList);
   const result = [];
   for (const model of modelsList) {
     let imageFound = false;
@@ -79,40 +82,79 @@ async function bigImage(modelsList, imagePath, titleText, socket) {
             const fullImageUrl = `${backend}${firstImage.web_path}`;
             imageFound = true;
             console.log(fullImageUrl, "fullImageUrl!!!!!!");
-            // make rule for create new image name
-            /*  const rxName = /\/([^\/]+)$/;
-                        const imageNames = fullImageUrl.match(rxName);
-                        console.log(imageNames)*/
 
+            const rxName = /\/([^\/]+)$/;
+            const imageNameMatch = fullImageUrl.match(rxName);
+            const imageName = imageNameMatch && imageNameMatch[1]; // Получаем имя изображения из URL
+
+            if (!imageName) {
+              console.error('Failed to extract image name from URL:', fullImageUrl);
+              continue; // Пропускаем текущую итерацию цикла
+          }
+          const newImagePath = `${imagePath}/${imageName}`;   
+          
+          
             try {
               const imageResponse = await axios.get(fullImageUrl, {
-                responseType: "arraybuffer",
+                responseType: 'arraybuffer',
                 timeout: 30000,
-                
               });
 
-            //   const imageBinaryData = imageResponse.data;
-            //   const compressedImage = await jimp.read(imageBinaryData);
-            //   await compressedImage.writeAsync(imagePath);
-            //   const img64 = await compressedImage.getBase64Async(jimp.MIME_PNG);
-               
-              socket.send("modelImageEvent", {
-                modelName: model,
-                title: titleEn,
-                // image: img64,
-                 image: fullImageUrl,
-              });
+             // const newImagePath = `${imagePath}/${imageName}.jpeg`;
+              //const imagePath = `${imagePath}/${imageName}.jpeg`;
+
+              // const writer = fs.createWriteStream(newImagePath);
+              // writer.on("finish", () => {
+              //   console.log("Image saved successfully:", newImagePath);
+              //   // Далее вы можете отправить событие socket и добавить результат в массив
+              //   socket.send("modelImageEvent", {
+              //     modelName: model,
+              //     title: titleEn,
+              //     image: fullImageUrl,
+              //   });
+
+              //   result.push({
+              //     model,
+              //     title: titleEn,
+              //     path: newImagePath,
+              //   });
+              // });
+
+              //imageResponse.data.pipe(writer);
+                const imageBinaryData = imageResponse.data;
+                // console.log(jimp)
+                const compressedImage = await jimp.read(imageBinaryData);
+                 await compressedImage.writeAsync(newImagePath);
+                 const img64 = await compressedImage.getBase64Async(jimp.MIME_PNG);
+
+
+                 eventSender.send("modelImageEvent", {
+                  modelName: model,
+                  title: titleEn,
+                  image: img64
+                 });
+
 
               result.push({
                 model,
                 title: titleEn,
-                path: imagePath,
+                path: newImagePath,
               });
             } catch (error) {
               console.error("Error fetching image:", error);
-            }
+              // const ImageNotFound = "No image found";
 
-           
+              // socket.send("modelImageEvent", {
+              //   modelName: model,
+              //   title: titleEn,
+              //   image: ImageNotFound,
+              // });
+              // result.push({
+              //   model,
+              //   title: titleEn,
+              //   path: "",
+              // });
+            }
             break;
           }
         } else {
@@ -125,10 +167,9 @@ async function bigImage(modelsList, imagePath, titleText, socket) {
           console.error(error);
         }
       }
-    } 
+    }
   }
-  return result
+  return result;
 }
 
 module.exports = { ScanFiles, bigImage };
- 
