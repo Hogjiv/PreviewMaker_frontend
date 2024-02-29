@@ -10,12 +10,18 @@ export default {
   computed: {
     ...mapState(['modelsList']),
     totalReadyModels() {
+     
       const totalModels = this.modelsList.length;
-      const readyModels = this.modelsList.reduce((total, model) => {
-        return total + (model.ready ? 1 : 0);
+      const readyModels = this.modelsList.reduce((total,model) => {
+        return total + (model.ready ? 1 : 0); 
       }, 0);
-      const notReadyModels = totalModels - readyModels;
-      console.log("s1")
+
+      console.log("totalModels", totalModels)
+      console.log("readyModels", readyModels)
+
+      const notReadyModels = totalModels - readyModels; 
+      console.log("notReadyModels", notReadyModels)
+      
       return {
         totalModels,
         readyModels,
@@ -31,7 +37,6 @@ export default {
 </script>
 
 <template>
- 
   <div v-if="isVisible">
     <p class="bold-text  font-size-24   font-color-pink text-uppercase"> {{ totalReadyModels.notReadyModels }} models from {{ totalReadyModels.totalModels }} are not ready</p>
   </div>

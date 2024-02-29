@@ -28,4 +28,7 @@ contextBridge.exposeInMainWorld('API', {
     onModelList: (callback) => ipcRenderer.on('modelsListEvent', (_event, value) => callback(value)),
     onModelImage: (callback) =>  ipcRenderer.on('modelImageEvent', (_event, value) => callback(value)),
     onSetlList: (callback) =>  ipcRenderer.on('onSetlListEvent', (_event, value) => callback(value)),
+    onModelSaved: (callback) =>  ipcRenderer.on('modelSavedEvent', (_event, value) => callback(value)),
+
+    
 })

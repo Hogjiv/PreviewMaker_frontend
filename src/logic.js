@@ -38,7 +38,7 @@ async function ScanFiles(modelPath, excluded = []) {
   }
 }
 
-async function bigImage(modelsList, imagePath, titleText,  eventSender) {
+async function bigImage(modelsList, imagePath, titleText, eventSender) {
   console.log("88888image path", imagePath);
   console.log("888888titleText", titleText);
   console.log("8888modelsList", modelsList);
@@ -85,75 +85,44 @@ async function bigImage(modelsList, imagePath, titleText,  eventSender) {
 
             const rxName = /\/([^\/]+)$/;
             const imageNameMatch = fullImageUrl.match(rxName);
-            const imageName = imageNameMatch && imageNameMatch[1]; // Получаем имя изображения из URL
+            const imageName = imageNameMatch && imageNameMatch[1];
 
             if (!imageName) {
-              console.error('Failed to extract image name from URL:', fullImageUrl);
-              continue; // Пропускаем текущую итерацию цикла
-          }
-          const newImagePath = `${imagePath}/${imageName}`;   
-          
-          
+              console.error(
+                "Failed to extract image name from URL:",
+                fullImageUrl
+              );
+              continue;
+            }
+            const newImagePath = `${imagePath}/${imageName}`;
+
             try {
               const imageResponse = await axios.get(fullImageUrl, {
-                responseType: 'arraybuffer',
+                responseType: "arraybuffer",
                 timeout: 30000,
               });
 
-             // const newImagePath = `${imagePath}/${imageName}.jpeg`;
-              //const imagePath = `${imagePath}/${imageName}.jpeg`;
+              const imageBinaryData = imageResponse.data;
 
-              // const writer = fs.createWriteStream(newImagePath);
-              // writer.on("finish", () => {
-              //   console.log("Image saved successfully:", newImagePath);
-              //   // Далее вы можете отправить событие socket и добавить результат в массив
-              //   socket.send("modelImageEvent", {
-              //     modelName: model,
-              //     title: titleEn,
-              //     image: fullImageUrl,
-              //   });
+              const compressedImage = await jimp.read(imageBinaryData);
+              await compressedImage.writeAsync(newImagePath);
+              const img64 = await compressedImage.getBase64Async(jimp.MIME_PNG);
 
-              //   result.push({
-              //     model,
-              //     title: titleEn,
-              //     path: newImagePath,
-              //   });
-              // });
-
-              //imageResponse.data.pipe(writer);
-                const imageBinaryData = imageResponse.data;
-                // console.log(jimp)
-                const compressedImage = await jimp.read(imageBinaryData);
-                 await compressedImage.writeAsync(newImagePath);
-                 const img64 = await compressedImage.getBase64Async(jimp.MIME_PNG);
-
-
-                 eventSender.send("modelImageEvent", {
-                  modelName: model,
-                  title: titleEn,
-                  image: img64
-                 });
-
+              eventSender.send("modelImageEvent", {
+                modelName: model,
+                title: titleEn,
+                image: img64,
+              });
 
               result.push({
                 model,
                 title: titleEn,
                 path: newImagePath,
               });
+
+              eventSender.send("modelSavedEvent", model);
             } catch (error) {
               console.error("Error fetching image:", error);
-              // const ImageNotFound = "No image found";
-
-              // socket.send("modelImageEvent", {
-              //   modelName: model,
-              //   title: titleEn,
-              //   image: ImageNotFound,
-              // });
-              // result.push({
-              //   model,
-              //   title: titleEn,
-              //   path: "",
-              // });
             }
             break;
           }

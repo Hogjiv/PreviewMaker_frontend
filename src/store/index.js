@@ -58,19 +58,17 @@ const store = createStore({
         //   state.showResult = value;
         // },
 
-     //Эта мутация принимает данные изображения (название модели, заголовок и само изображение) и обновляет соответствующий объект в массиве modelsList в состоянии приложения.
         modelImage(state, data) {
             console.log("modelImage, 22222")
             state.modelsList = state.modelsList.map(el => {
                 if (el.name !== data.modelName) return el;
                 el.title = data.title
-                console.log("^^^^^^^^^^^^", data.title)
                 el.image = data.image
-                console.log("^^^^^^^^^^^^", data.image)
                 return el
             })
         },
         modelReady(state, modelName) {
+            console.log("222222222222222222222222")
             state.modelsList = state.modelsList.map(el => {
                 if (el.name !== modelName) return el
                 el.ready = true
@@ -95,26 +93,6 @@ const store = createStore({
             console.log('Save image???')
         },
 
-        /* async modelsList(store) {
-             try {
-                 const list = await window.API.modelsList();
-                 store.commit("updateModelsList", list);
-                 console.log("API model list call");
-             } catch (error) {
-                 console.error("Error fetching modelsList:", error);
-             }
-         },*/
-
-
-        /*  async scriptRunning(store) {
-              try {
-                  const isRunning = await window.API.scriptRunning();
-                  store.commit("setScriptRunning", isRunning);
-              } catch (error) {
-                  console.error("Error in running script:", error);
-              }
-          },*/
-
         electronConnect() {
             // const socket = io(BASE_URL);
             // socket.on('scriptRunning', isRunning => {
@@ -131,15 +109,21 @@ const store = createStore({
                 store.commit("setScriptRunning", isRunning)
             })
             window.API.onModelList(list => { 
+            
                 store.commit("setModeslList", list) 
             })
             window.API.onModelImage(data => { 
                 store.commit('modelImage', data)
-                console.log("onModelImage, 3333")
             })
-            window.API.onSetlList(list => { 
-                store.commit("setModeslList", list)
+             window.API.onModelSaved(modelName => { 
+                console.log("0000000000000000000000000000000000000000000000000000000000000")
+                store.commit("modelReady", modelName)
+                console.log("modelSaved, 999999999999999999999999999999999999999999999", modelName)
             })
+
+            // window.API.onSetlList(list => { 
+            //     store.commit("setModeslList", list)
+            // })
               /*  ipcMain.on('modelImage', (event, data) => {
                     console.log('Received modelImage data:', data);
                     store.commit('modelImage', data)
