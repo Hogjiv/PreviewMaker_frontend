@@ -113,6 +113,7 @@ app.whenReady().then(() => {
             console.log("problem", err);
           }
         }
+        console.log(cache)
         if (!softScan && !hardScan && cache) {
           event.sender.send("modelsListEvent", recached);
           event.sender.send("scriptRunningEvent", false);

@@ -16,11 +16,7 @@ export default {
         return total + (model.ready ? 1 : 0); 
       }, 0);
 
-      console.log("totalModels", totalModels)
-      console.log("readyModels", readyModels)
-
       const notReadyModels = totalModels - readyModels; 
-      console.log("notReadyModels", notReadyModels)
       
       return {
         totalModels,

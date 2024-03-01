@@ -25,7 +25,6 @@ const store = createStore({
              console.log("received", state);
          },*/
         pathSaveModel(state, modelPath) {
-            console.log("model path STORE", state);
             state.pathModel = modelPath;
         },
         /* pathSaveModel(state, modelPath) {
@@ -33,14 +32,12 @@ const store = createStore({
            state.pathModel = modelPath;
          },*/
         pathSaveImage(state, imagePath) {
-            console.log("ask image path from STORE", state);
             state.imagePath = imagePath;
         },
         setSocket(state, next) {
             state.socket = next;
         },
            setScriptRunning(state, next) {
-            console.log("setScriptRunning mutation")
             state.scriptRunning = next;
         },
         setModeslList(state, data) {
@@ -59,7 +56,6 @@ const store = createStore({
         // },
 
         modelImage(state, data) {
-            console.log("modelImage, 22222")
             state.modelsList = state.modelsList.map(el => {
                 if (el.name !== data.modelName) return el;
                 el.title = data.title
@@ -68,7 +64,6 @@ const store = createStore({
             })
         },
         modelReady(state, modelName) {
-            console.log("222222222222222222222222")
             state.modelsList = state.modelsList.map(el => {
                 if (el.name !== modelName) return el
                 el.ready = true
@@ -115,10 +110,8 @@ const store = createStore({
             window.API.onModelImage(data => { 
                 store.commit('modelImage', data)
             })
-             window.API.onModelSaved(modelName => { 
-                console.log("0000000000000000000000000000000000000000000000000000000000000")
+             window.API.onModelSaved(modelName => {                
                 store.commit("modelReady", modelName)
-                console.log("modelSaved, 999999999999999999999999999999999999999999999", modelName)
             })
 
             // window.API.onSetlList(list => { 
