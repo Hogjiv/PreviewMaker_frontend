@@ -220,18 +220,22 @@ async function bigImage(modelsList, imagePath, titleText, eventSender) {
         if (!modelData) {
           console.log(`No model data found for model: ${model}`);
 
-          const defaultImageUrl =
-            "https://b6.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/model_images/0000/0000/6256/6256719.65dfd6cd18ea1.jpeg";
-          try {
-            const response = await axios.get(defaultImageUrl, {
-              responseType: "arraybuffer",
-            });
-            const imgBase64 = Buffer.from(response.data, "binary").toString("base64");
+          // const defaultImageUrl =
+          //   "https://b6.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/model_images/0000/0000/6256/6256719.65dfd6cd18ea1.jpeg";
+          // try {
+          //   const response = await axios.get(defaultImageUrl, {
+          //     responseType: "arraybuffer",
+          //   });
+          //   const imgBase64 = Buffer.from(response.data, "binary").toString("base64");
+            
+          const   defaultImageUrl = fs.readFileSync('./src/assets/noImageFound.jpg')
+            const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString("base64");
+
 
             eventSender.send("modelImageEvent", {
               modelName: model,
               title: "Model not found",
-              image: imgBase64,
+              image:"data:image/png;base64," + imgBase64,
             });
 
             const imageName = "noImageFound.jpg"; // Change this to the actual image name
@@ -243,9 +247,9 @@ async function bigImage(modelsList, imagePath, titleText, eventSender) {
               path: newImagePath,
             });
 
-          } catch (error) {
-            console.error("Error fetching default image:", error);
-          }
+          // } catch (error) {
+          //   console.error("Error fetching default image:", error);
+          // }
           return;
         }
 
@@ -313,6 +317,27 @@ async function bigImage(modelsList, imagePath, titleText, eventSender) {
           // HERE MODEL NOT FOUND
           console.log("NOT FOUND ", model);
         }
+
+        // const   defaultImageUrl = fs.readFileSync('./src/assets/noImageFound.jpg')
+        // const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString("base64");
+
+
+        // eventSender.send("modelImageEvent", {
+        //   modelName: model,
+        //   title: "Model not found",
+        //   image:"data:image/png;base64," + imgBase64,
+        // });
+
+        // const imageName = "noImageFound.jpg"; // Change this to the actual image name
+        // const newImagePath = `${imagePath}/${imageName}`; // Define newImagePath here
+
+        // result.push({
+        //   model,
+        //   title: "NO TITLE",
+        //   path: newImagePath,
+        // });
+
+
       }
     }
   }

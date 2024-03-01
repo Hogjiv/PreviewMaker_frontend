@@ -108,6 +108,7 @@ const store = createStore({
                 store.commit("setModeslList", list) 
             })
             window.API.onModelImage(data => { 
+                console.log(data)
                 store.commit('modelImage', data)
             })
              window.API.onModelSaved(modelName => {                
