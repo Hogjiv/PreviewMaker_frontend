@@ -52,6 +52,7 @@ export default {
             6. Now you can see a table with all models, wich was scanned. It
             can take a few time to scan your files and find in on website  **. You can see
             progress in progress bar, located upper of the table <br />
+            7. <b class="font-color-pink"> Do not delete scan.JSON file </b> <br />
             * It's not important if you have zip/rar or unarchived files. My
             script will do everything with any state of you files. <br />
             ** Sometimes it can take a lot of time to scan files and find all

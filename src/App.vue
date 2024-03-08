@@ -10,26 +10,26 @@ export default {
     // progressBar
   },
   created() {
-     this.$store.dispatch("electronConnect");
+    this.$store.dispatch("electronConnect");
   },
 };
 </script>
 
 <template>
   <!-- <div id="app" class="d-flex justify-content-center content "> -->
-  <div class="xx">
-  <div id="app" class="app">
-    <router-view></router-view>
+  
+    <div id="app" class="app">
+      <router-view></router-view>
+    </div>
 
-  </div>
-   <div class=" footer font-color-gray  mt-3 font-size-14 normal-text footer text-center" >
+    <div class=" footer font-color-gray  mt-5 font-size-14 normal-text text-center ">
       Questions to
       <a href="mailto:hogjiv@gmail.com">
-      hhyperplace@gmail.com </a> <br>
+        hhyperplace@gmail.com </a> <br>
       donation to PayPal <u> hogjiv01@gmail.com </u> <br>
       Copyright Irina Avdeyeva | 2023
     </div>
-    </div>
+ 
 </template>
 
 <style lang="scss">
@@ -40,40 +40,44 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap");
 
 body {
-height: 100%;
- margin: 0; /* Убираем отступы */
+  height: 100%;
+  margin: 0;
+  /* Убираем отступы */
 }
 
 a {
-color: #B9B9B9 !important;
+  color: #B9B9B9 !important;
 }
 
 
 .footer {
- width: 100%;
-position: absolute;
-
+  width: 100%;
+  position: absolute;
 }
 
 .app {
-/*  position: relative;*/
-/*  height: 100%;*/
+  /*  position: relative;*/
+  /*  height: 100%;*/
 
 }
+ 
 
 .normal-text {
   font-family: "Roboto", sans-serif;
-  font-weight: 400; /* Обычный вес */
+  font-weight: 400;
+  /* Обычный вес */
 }
 
 .medium-text {
   font-family: "Roboto", sans-serif;
-  font-weight: 500; /* Средний вес */
+  font-weight: 500;
+  /* Средний вес */
 }
 
 .bold-text {
   font-family: "Roboto", sans-serif;
-  font-weight: 900; /* Жирный вес */
+  font-weight: 900;
+  /* Жирный вес */
 }
 
 .font-size-14 {
@@ -113,27 +117,28 @@ position: absolute;
 }
 
 .font-color-gray {
-color: #B9B9B9}
+  color: #B9B9B9
+}
 
 
 
 ::-webkit-scrollbar {
-    width: 3px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #6e6e6e;
-    border-radius: 2px;
+  background-color: #6e6e6e;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #2c2c2c;
+  background-color: #2c2c2c;
 }
 
 
 .scrollbar {
-    scrollbar-color: #3f3f3f;
-    width: 8px;
+  scrollbar-color: #3f3f3f;
+  width: 8px;
 }
 
 

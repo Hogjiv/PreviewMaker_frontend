@@ -191,7 +191,7 @@ async function bigImage(modelsList, imagePath, titleText, eventSender) {
   }
   return result;
 }
-*/async function bigImage(modelsList, imagePath, titleText, eventSender) {
+*/ async function bigImage(modelsList, imagePath, titleText, eventSender) {
   const result = [];
   for (const model of modelsList) {
     let imageFound = false;
@@ -227,25 +227,28 @@ async function bigImage(modelsList, imagePath, titleText, eventSender) {
           //     responseType: "arraybuffer",
           //   });
           //   const imgBase64 = Buffer.from(response.data, "binary").toString("base64");
-            
-          const   defaultImageUrl = fs.readFileSync('./src/assets/noImageFound.jpg')
-            const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString("base64");
 
+          const defaultImageUrl = fs.readFileSync(
+            "./src/assets/noImageFound.jpg"
+          );
+          const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString(
+            "base64"
+          );
 
-            eventSender.send("modelImageEvent", {
-              modelName: model,
-              title: "Model not found",
-              image:"data:image/png;base64," + imgBase64,
-            });
+          eventSender.send("modelImageEvent", {
+            modelName: model,
+            title: "Model not found",
+            image: "data:image/png;base64," + imgBase64,
+          });
 
-            const imageName = "noImageFound.jpg"; // Change this to the actual image name
-            const newImagePath = `${imagePath}/${imageName}`; // Define newImagePath here
+          const imageName = "noImageFound.jpg"; // Change this to the actual image name
+          const newImagePath = `${imagePath}/${imageName}`; // Define newImagePath here
 
-            result.push({
-              model,
-              title: "NO TITLE",
-              path: newImagePath,
-            });
+          result.push({
+            model,
+            title: "NO TITLE",
+            path: newImagePath,
+          });
 
           // } catch (error) {
           //   console.error("Error fetching default image:", error);
@@ -321,7 +324,6 @@ async function bigImage(modelsList, imagePath, titleText, eventSender) {
         // const   defaultImageUrl = fs.readFileSync('./src/assets/noImageFound.jpg')
         // const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString("base64");
 
-
         // eventSender.send("modelImageEvent", {
         //   modelName: model,
         //   title: "Model not found",
@@ -336,13 +338,10 @@ async function bigImage(modelsList, imagePath, titleText, eventSender) {
         //   title: "NO TITLE",
         //   path: newImagePath,
         // });
-
-
       }
     }
   }
   return result;
 }
-
 
 module.exports = { ScanFiles, bigImage };

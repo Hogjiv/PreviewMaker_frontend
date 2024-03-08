@@ -19,9 +19,11 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    minWidth:450,
+    width: 600,
+    height: 700,
+    minWidth: 450,
+    icon: "./public/logo.png",
+    // titleBarStyle: 'customButtonsOnHover',
     webPreferences: {
       preload: path.join(__dirname, "../src/preload.js"),
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
@@ -29,14 +31,21 @@ async function createWindow() {
     },
   });
 
+  win.setMenuBarVisibility(false);
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
     win.loadURL("app://./index.html");
-    console.log("!!!!!??????");
   }
+  // if (process.env.WEBPACK_DEV_SERVER_URL) {
+  //   await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+  //   if (!process.env.IS_TEST) win.webContents.openDevTools();
+  // } else {
+  //   createProtocol("app");
+  //   win.loadURL("app://./index.html");
+  // }
 }
 
 app.on("window-all-closed", () => {
@@ -91,7 +100,7 @@ app.whenReady().then(() => {
                 modelPath + "/" + cache[i].model + ".zip",
                 modelPath + "/" + cache[i].model + ".rar",
               ];
-              const modelExists = tests.some(path => fs.existsSync(path))
+              const modelExists = tests.some((path) => fs.existsSync(path));
               const imgExists = fs.existsSync(cache[i].path);
               if (!modelExists) {
                 continue;
@@ -113,7 +122,7 @@ app.whenReady().then(() => {
             console.log("problem", err);
           }
         }
-        console.log(cache)
+        console.log(cache);
         if (!softScan && !hardScan && cache) {
           event.sender.send("modelsListEvent", recached);
           event.sender.send("scriptRunningEvent", false);

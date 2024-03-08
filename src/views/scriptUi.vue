@@ -3,7 +3,6 @@
 import progressBar from "@/components/progressBar";
 import checkBox from "@/components/checkBox";
 import faqPage from "@/components/faqPage";
-// import popUp from "@/components/popUp";
 
 export default {
   data() {
@@ -34,7 +33,6 @@ export default {
     faqPage,
     progressBar,
     checkBox,
-    // popUp
   },
   watch: {
     "$store.state.scriptRunning"(newVal) {
@@ -104,7 +102,9 @@ export default {
 
 <template>
   <div class="header d-flex justify-content-center align-items-center">
-    <h2 class="bold-text font-color-dark text-uppercase">Preview maker</h2>
+    <h2 class="bold-text font-color-dark text-uppercase">
+      Preview maker
+    </h2>
   </div>
 
   <div v-if="faqOpen">
@@ -115,14 +115,13 @@ export default {
     </div>
   </div>
 
-
   <div class="fluid-container d-flex flex-row">
     <div class="container-lg d-flex flex-column justify-content-center align-items-center">
       <div class="container-lg d-flex flex-row justify-content-center align-items-center menu">
         <div class="row col-12 d-flex justify-content-center ">
           <div
-            class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2 mt-4 mt-md-0 mt-lg-0   ">
-            <div class="d-flex mb-3  mb-md-3 mb-lg-3">
+            class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2 mt-4 mt-md-4 mt-lg-0   ">
+            <div class="d-flex mb-3 mb-md-3 mb-lg-3">
               <checkBox v-model="softScan" />
               <p class="font-size-16 mx-2">Soft scan</p>
             </div>
@@ -138,8 +137,9 @@ export default {
               placeholder="Path for load models" />
             <input type="text" v-model="imagePath" class="input-form mt-3" @input="saveDataImage"
               placeholder="Path for save image" />
+             
           </div>
-
+        
 
           <div
             class="d-flex faq flex-column col-md col-lg-2 col-sm-6 align-items-center align-self-center justify-content-center  order-lg-3 order-sm-3 order-3">
@@ -149,25 +149,27 @@ export default {
           </div>
         </div>
       </div>
-      <div class="containter d-flex flex-column justify-content-center align-items-center">
+
+      <div class="containter d-flex flex-column justify-content-center align-items-center ">
         <div class="btn-block d-flex flex-column">
-          <div class="d-flex justify-content-center align-items-center">
-            <button class="big-btn mt-3 col-12 align-items-center" :class="{
-              btnActive: btnActive && $store.state.scriptRunning,
-              btnDisabled: !$store.state.scriptRunning,
-            }" @click="btnClicked">
-              <p class="bold-text font-size-22 text-white text-center btnDisables">
-                {{
-                  btnActive && $store.state.scriptRunning
-                  ? "Running!"
-                  : "Make previews!"
-                }}
-              </p>
+         
+            <div class="d-flex justify-content-center align-items-center">
+              <button class="big-btn mt-3 col-12 align-items-center " 
+              :class="{btnActive: btnActive && $store.state.scriptRunning,btnDisabled: !$store.state.scriptRunning,}" @click="btnClicked">
+                <p class="bold-text font-size-22 text-white text-center btnDisables">
+                  {{
+                    btnActive && $store.state.scriptRunning
+                      ? "Running!"
+                      : "Make previews!"
+                  }}
+                </p>      
+              </button>
               <div class="popUp" v-if="showPopUp">
-                Copy path from PC which looks like 'D/: ....'
-              </div>
-            </button>
-          </div>
+                  Copy path from PC which looks like 'D/: ....'
+                </div>
+              </div> 
+ 
+
           <div v-if="btnActive">
             <div class="d-flex col-12 justify-content-center align-items-center">
               <button class="big-btn mt-3" @click="showProgress = !showProgress">
@@ -212,7 +214,22 @@ export default {
     </div>
   </div>
 </template>
+
 <style>
+.popUp {
+  background-color: #7e7e7ec7;
+  max-width: 200px;
+  max-height: 100px;
+  position: absolute;  
+  margin-top: 160px;  
+  border-radius: 10px;
+  padding: 6px;
+  animation-name: fadeOut;
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
+  z-index: 2;
+}
+
 .modal {
   position: absolute;
   display: flex;
@@ -221,15 +238,7 @@ export default {
   max-width: 450px;
 }
 
-.hh {
-  background-color: tomato;
-  height: 300px;
-  widows: 300px;
-  margin: 0px;
-  top: 0;
-  left: 0px;
-  bottom: 0;
-}
+ 
 
 @keyframes slideIn {
   from {
@@ -292,7 +301,9 @@ p {
 .header {
   background-color: #f1f1f1;
   height: 70px;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  border-bottom: #b3b3b3 2px solid;
+  border-top: #b3b3b3 2px solid;
+  box-shadow: 0px 4px 7px 0px rgba(145, 145, 145, 0.25);
 }
 
 .menu {
@@ -308,7 +319,7 @@ p {
   width: 430px;
   height: 50px;
   background-color: #f0eef0;
-  border-radius: 25px;
+  border-radius: 20px;
   border-style: none;
   outline: none;
 }
@@ -322,7 +333,7 @@ p {
   border: none;
   width: 210px !important;
   height: 75px !important;
-  border-radius: 25px;
+  border-radius: 20px;
   background-color: #bcbcbc;
 }
 
@@ -405,17 +416,7 @@ p {
   }
 }
 
-.popUp {
-  background-color: #7e7e7ec7;
-  max-width: 250px;
-  max-height: 100px;
-  position: absolute;
-  margin-top: 30px;
-  border-radius: 10px;
-  animation-name: fadeOut;
-  animation-duration: 3s;
-  animation-fill-mode: forwards;
-}
+
 
 @keyframes fadeOut {
   from {
