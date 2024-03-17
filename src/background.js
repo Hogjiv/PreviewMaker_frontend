@@ -39,13 +39,6 @@ async function createWindow() {
     createProtocol("app");
     win.loadURL("app://./index.html");
   }
-  // if (process.env.WEBPACK_DEV_SERVER_URL) {
-  //   await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-  //   if (!process.env.IS_TEST) win.webContents.openDevTools();
-  // } else {
-  //   createProtocol("app");
-  //   win.loadURL("app://./index.html");
-  // }
 }
 
 app.on("window-all-closed", () => {
